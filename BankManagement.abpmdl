@@ -1,0 +1,79 @@
+{
+  "folders": {
+    "items": {
+      "src": {},
+      "test": {},
+      "host": {}
+    }
+  },
+  "packages": {
+    "BankManagement.Domain.Shared": {
+      "path": "src/BankManagement.Domain.Shared/BankManagement.Domain.Shared.abppkg",
+      "folder": "src"
+    },
+    "BankManagement.Domain": {
+      "path": "src/BankManagement.Domain/BankManagement.Domain.abppkg",
+      "folder": "src"
+    },
+    "BankManagement.Application.Contracts": {
+      "path": "src/BankManagement.Application.Contracts/BankManagement.Application.Contracts.abppkg",
+      "folder": "src"
+    },
+    "BankManagement.Application": {
+      "path": "src/BankManagement.Application/BankManagement.Application.abppkg",
+      "folder": "src"
+    },
+    "BankManagement.EntityFrameworkCore": {
+      "path": "src/BankManagement.EntityFrameworkCore/BankManagement.EntityFrameworkCore.abppkg",
+      "folder": "src"
+    },
+    "BankManagement.MongoDB": {
+      "path": "src/BankManagement.MongoDB/BankManagement.MongoDB.abppkg",
+      "folder": "src"
+    },
+    "BankManagement.HttpApi": {
+      "path": "src/BankManagement.HttpApi/BankManagement.HttpApi.abppkg",
+      "folder": "src"
+    },
+    "BankManagement.HttpApi.Client": {
+      "path": "src/BankManagement.HttpApi.Client/BankManagement.HttpApi.Client.abppkg",
+      "folder": "src"
+    },
+    "BankManagement.TestBase": {
+      "path": "test/BankManagement.TestBase/BankManagement.TestBase.abppkg",
+      "folder": "test"
+    },
+    "BankManagement.EntityFrameworkCore.Tests": {
+      "path": "test/BankManagement.EntityFrameworkCore.Tests/BankManagement.EntityFrameworkCore.Tests.abppkg",
+      "folder": "test"
+    },
+    "BankManagement.MongoDB.Tests": {
+      "path": "test/BankManagement.MongoDB.Tests/BankManagement.MongoDB.Tests.abppkg",
+      "folder": "test"
+    },
+    "BankManagement.Domain.Tests": {
+      "path": "test/BankManagement.Domain.Tests/BankManagement.Domain.Tests.abppkg",
+      "folder": "test"
+    },
+    "BankManagement.Application.Tests": {
+      "path": "test/BankManagement.Application.Tests/BankManagement.Application.Tests.abppkg",
+      "folder": "test"
+    },
+    "BankManagement.HttpApi.Host": {
+      "path": "host/BankManagement.HttpApi.Host/BankManagement.HttpApi.Host.abppkg",
+      "folder": "host"
+    },
+    "BankManagement.HttpApi.Client.ConsoleTestApp": {
+      "path": "test/BankManagement.HttpApi.Client.ConsoleTestApp/BankManagement.HttpApi.Client.ConsoleTestApp.abppkg",
+      "folder": "test"
+    },
+    "BankManagement.AuthServer": {
+      "path": "host/BankManagement.AuthServer/BankManagement.AuthServer.abppkg",
+      "folder": "host"
+    },
+    "BankManagement.Host.Shared": {
+      "path": "host/BankManagement.Host.Shared/BankManagement.Host.Shared.abppkg",
+      "folder": "host"
+    }
+  }
+}
