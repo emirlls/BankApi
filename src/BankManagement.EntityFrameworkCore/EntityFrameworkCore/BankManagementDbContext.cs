@@ -1,8 +1,15 @@
 ﻿using BankManagement.Entities;
 using BankManagement.Entities.LookUps;
 using Microsoft.EntityFrameworkCore;
+using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.FeatureManagement.EntityFrameworkCore;
+using Volo.Abp.Identity.EntityFrameworkCore;
+using Volo.Abp.OpenIddict.EntityFrameworkCore;
+using Volo.Abp.PermissionManagement.EntityFrameworkCore;
+using Volo.Abp.SettingManagement.EntityFrameworkCore;
+using Volo.Abp.TenantManagement.EntityFrameworkCore;
 
 namespace BankManagement.EntityFrameworkCore;
 
@@ -33,5 +40,13 @@ public class BankManagementDbContext : AbpDbContext<BankManagementDbContext>, IB
 
         builder.ApplyConfigurationsFromAssembly(typeof(BankManagementDbContext).
             Assembly);
+        
+        builder.ConfigurePermissionManagement();
+        builder.ConfigureSettingManagement();
+        builder.ConfigureAuditLogging();
+        builder.ConfigureIdentity();
+        builder.ConfigureOpenIddict();
+        builder.ConfigureFeatureManagement();
+        builder.ConfigureTenantManagement();
     }
 }

@@ -13,4 +13,8 @@
     <ProjectReference Include="..\BankManagement.Domain.Shared\BankManagement.Domain.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Repositories\" />
+  </ItemGroup>
+
 </Project>
