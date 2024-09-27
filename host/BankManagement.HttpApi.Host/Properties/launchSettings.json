@@ -15,6 +15,22 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
+    "Development": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "applicationUrl": "https://localhost:44316",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
+    "Testing": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "applicationUrl": "https://localhost:44316",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Testing"
+      }
+    },
     "BankManagement.DemoApp": {
       "commandName": "Project",
       "launchBrowser": true,
