@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using BankManagement.EntityFrameworkCore;
+using BankManagement.Extensions;
 using BankManagement.MultiTenancy;
 using StackExchange.Redis;
 using Microsoft.OpenApi.Models;
@@ -55,6 +56,12 @@ namespace BankManagement;
     )]
 public class BankManagementHttpApiHostModule : AbpModule
 {
+    public override void PreConfigureServices(ServiceConfigurationContext context)
+    {
+        base.PreConfigureServices(context);
+        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+        ServiceConfigurationContextExtension.ResolveSchemaAndPrefix();
+    }
 
     public override void ConfigureServices(ServiceConfigurationContext context)
     {

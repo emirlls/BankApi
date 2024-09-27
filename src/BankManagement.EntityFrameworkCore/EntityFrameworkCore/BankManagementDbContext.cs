@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using BankManagement.Entities;
+using BankManagement.Entities.LookUps;
+using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 
@@ -16,11 +18,20 @@ public class BankManagementDbContext : AbpDbContext<BankManagementDbContext>, IB
     {
 
     }
+    
+    public DbSet<Customer> Customers { get; }
+    public DbSet<Account> Accounts { get; }
+    public DbSet<Card> Cards { get; }
+    public DbSet<Transaction> Transactions { get; }
+    
+    public DbSet<AccountType> AccountTypes { get; set; }
+    public DbSet<CardType> CardTypes { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
 
-        builder.ConfigureBankManagement();
+        builder.ApplyConfigurationsFromAssembly(typeof(BankManagementDbContext).
+            Assembly);
     }
 }

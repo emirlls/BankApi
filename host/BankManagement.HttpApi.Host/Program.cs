@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
+using BankManagement.Constants;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
@@ -32,6 +34,23 @@ public class Program
             builder.Host.AddAppSettingsSecretsJson()
                 .UseAutofac()
                 .UseSerilog();
+            builder.Host.AddAppSettingsSecretsJson().ConfigureAppConfiguration((
+                _,
+                builder
+            ) =>
+            {
+                builder.AddJsonFile(
+                        $"{MultiEnvironmentConstants.AspNetCoreEnvironmentAppSettingFile}{MultiEnvironmentConstants.AspNetCoreEnvironmentExtention}",
+                        false, true)
+                    .AddJsonFile(
+                        $"{MultiEnvironmentConstants.AspNetCoreEnvironmentAppSettingFile}." +
+                        $"{Environment.GetEnvironmentVariable($"{MultiEnvironmentConstants.
+                            AspNetCoreEnvironment}")}" +
+                        $"{MultiEnvironmentConstants.AspNetCoreEnvironmentExtention}",
+                        true,
+                        true
+                    ).AddEnvironmentVariables();
+            });
             await builder.AddApplicationAsync<BankManagementHttpApiHostModule>();
             var app = builder.Build();
             await app.InitializeApplicationAsync();

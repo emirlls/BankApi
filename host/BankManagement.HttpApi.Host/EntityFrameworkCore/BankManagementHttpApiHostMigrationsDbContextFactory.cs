@@ -12,7 +12,7 @@ public class BankManagementHttpApiHostMigrationsDbContextFactory : IDesignTimeDb
         var configuration = BuildConfiguration();
 
         var builder = new DbContextOptionsBuilder<BankManagementHttpApiHostMigrationsDbContext>()
-            .UseNpgsql(configuration.GetConnectionString("BankManagement"));
+            .UseNpgsql(configuration.GetConnectionString("Default"));
 
         return new BankManagementHttpApiHostMigrationsDbContext(builder.Options);
     }
