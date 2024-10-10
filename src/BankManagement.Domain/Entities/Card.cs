@@ -20,4 +20,9 @@ public class Card:FullAuditedEntity<Guid>
     {
         
     }
+    public Card(Guid id)
+    {
+        Id = id;
+        
+    }
 }

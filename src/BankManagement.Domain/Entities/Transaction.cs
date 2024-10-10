@@ -14,5 +14,9 @@ public class Transaction : FullAuditedEntity<Guid>
     {
         
     }
-    
+    public Transaction(Guid id)
+    {
+        Id = id;
+        
+    }
 }

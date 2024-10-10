@@ -22,4 +22,9 @@ public class Account:FullAuditedEntity<Guid>
     {
         
     }
+    public Account(Guid id)
+    {
+        Id = id;
+        
+    }
 }
