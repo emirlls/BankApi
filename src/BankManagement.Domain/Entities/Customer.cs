@@ -1,6 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Security.Principal;
+using BankManagement.Interfaces;
 using Volo.Abp.Domain.Entities.Auditing;
+using Volo.Abp.MultiTenancy;
+using Volo.Abp.Users;
 
 namespace BankManagement.Entities;
 
@@ -17,5 +21,9 @@ public class Customer:FullAuditedEntity<Guid>
     public Customer()
     {
         
+    }
+    public Customer(Guid id)
+    {
+        Id = id;
     }
 }
