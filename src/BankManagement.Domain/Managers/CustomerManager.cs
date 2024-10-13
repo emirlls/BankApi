@@ -33,4 +33,20 @@ public class CustomerManager:DomainService
             Birthday = birthday
         };
     }
+
+
+    public Customer Update(
+        Customer customer,
+        string name,
+        string surname,
+        string mail,
+        string phone
+    )
+    {
+        customer.Name = name;
+        customer.Surname = surname;
+        customer.Mail = mail;
+        customer.Phone = phone;
+        return customer;
+    }
 }

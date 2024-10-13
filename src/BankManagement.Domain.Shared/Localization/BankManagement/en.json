@@ -2,6 +2,19 @@
   "culture": "en",
   "texts": {
     "MyAccount":  "My account",
-    "SamplePageMessage": "A sample page for the BankManagement module"
+    "SamplePageMessage": "A sample page for the BankManagement module",
+
+    "BankManagement.Customer:00001": "Customer not found",
+    "BankManagement.Customer:00002": "Customer already exists",
+
+    "BankManagement.Customer.IdentityNumber:00001": "Identity number field cannot be empty",
+    "BankManagement.Customer.IdentityNumber:00002": "Identity number field must be 11 characters",
+
+    "BankManagement.Customer.Name:00001": "Name field cannot be empty",
+    "BankManagement.Customer.Surname:00001": "Surname field cannot be empty",
+    "BankManagement.Customer.Phone:00001": "Phone field cannot be empty",
+    "BankManagement.Customer.Phone:00002": "Phone field must be 10 characters",
+
+    "BankManagement.Customer.BirthDay:00001": "Birthday field cannot be empty"
   }
 }
