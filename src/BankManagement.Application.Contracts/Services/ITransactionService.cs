@@ -1,6 +1,6 @@
 using Volo.Abp.Application.Services;
 
-namespace BankManagement.Interfaces;
+namespace BankManagement.Services;
 
 public interface ITransactionService:IApplicationService
 {

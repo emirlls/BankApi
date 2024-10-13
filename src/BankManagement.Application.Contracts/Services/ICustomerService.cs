@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using BankManagement.Dtos;
 using Volo.Abp.Application.Services;
 
-namespace BankManagement.Interfaces;
+namespace BankManagement.Services;
 
 public interface ICustomerService:IApplicationService
 {
