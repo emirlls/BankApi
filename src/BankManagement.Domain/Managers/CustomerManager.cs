@@ -7,11 +7,10 @@ namespace BankManagement.Managers;
 
 public class CustomerManager:DomainService
 {
-    private readonly IRepository<Customer, Guid> _customerRepository;
 
-    public CustomerManager(IRepository<Customer, Guid> customerRepository)
+    public CustomerManager()
     {
-        _customerRepository = customerRepository;
+        
     }
 
 

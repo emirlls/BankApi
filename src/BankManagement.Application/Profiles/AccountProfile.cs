@@ -5,16 +5,15 @@ using BankManagement.Enums;
 using BankManagement.Localization;
 using Microsoft.Extensions.Localization;
 using Volo.Abp.AutoMapper;
-using Volo.Abp.Identity;
+using Volo.Abp.Identity; 
 
 namespace BankManagement.Profiles;
 
 public class AccountProfile:Profile
 {
     private readonly IStringLocalizer<BankManagementResource> _stringLocalizer;
-    public AccountProfile(IStringLocalizer<BankManagementResource> stringLocalizer)
+    public AccountProfile()
     {
-        _stringLocalizer = stringLocalizer;
         CreateMap<Account, AccountDto>()
             .ForMember(x => x.Iban, a =>
                 a.MapFrom(c => c.Iban))
