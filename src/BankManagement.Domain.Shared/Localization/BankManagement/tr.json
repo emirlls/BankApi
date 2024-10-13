@@ -2,6 +2,20 @@
   "culture": "tr",
   "texts": {
     "MyAccount":  "Hesabım",
-    "SamplePageMessage": "BankManagement modulünden örnek bir sayfa"
+    "SamplePageMessage": "BankManagement modulünden örnek bir sayfa",
+    
+    "BankManagement.Customer:00001": "Müşteri bulunamadı",
+    "BankManagement.Customer:00002": "Müşteri zaten var",
+
+    "BankManagement.Customer.IdentityNumber:00001": "Kimlik no alanı boş olamaz",
+    "BankManagement.Customer.IdentityNumber:00002": "Kimlik no alanı 11 karakteri geçemez",
+
+    "BankManagement.Customer.Name:00001": "Ad alanı boş olamaz",
+    "BankManagement.Customer.Surname:00001": "Soyad alanı boş olamaz",
+    "BankManagement.Customer.Phone:00001": "Telefon no alanı boş olamaz",
+    "BankManagement.Customer.Phone:00002": "Telefon no alanı 10 karakteri geçemez",
+
+    "BankManagement.Customer.BirthDay:00001": "Doğum tarihi alanı boş olamaz"
+    
   }
 }

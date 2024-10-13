@@ -10,7 +10,7 @@ public class CustomerProfile:Profile
     {
         CreateMap<Customer, CustomerDto>()
             .ForMember(x => x.IdentityNumber, a =>
-                a.MapFrom(c => c.IdentityNumber))
+                a.Ignore())
             .ForMember(x => x.Name, a =>
                 a.MapFrom(c => c.Name))
             .ForMember(x => x.Surname, a =>
@@ -20,8 +20,20 @@ public class CustomerProfile:Profile
             .ForMember(x => x.Phone, a =>
                 a.MapFrom(c => c.Phone))
             .ForMember(x => x.Birthday, a =>
-                a.MapFrom(c => c.Birthday));
-        
-        
+                a.MapFrom(c => c.Birthday))
+            .AfterMap<CustomerMappingAction>();
+
+    }
+    
+    public class CustomerMappingAction:IMappingAction<Customer,CustomerDto>
+    {
+        public CustomerMappingAction()
+        {
+        }
+
+        public void Process(Customer source, CustomerDto destination, ResolutionContext context)
+        {
+            destination.IdentityNumber = source.IdentityNumber;
+        }
     }
 }
