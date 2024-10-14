@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using BankManagement.Dtos;
+using BankManagement.Dtos.Customers;
 using BankManagement.Services;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc;
@@ -41,7 +42,7 @@ public class CustomerController:AbpControllerBase
     /// <param name="customerUpdateDto"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    [HttpPut]
+    [HttpPut("{identityNumber}")]
     public async Task<CustomerDto> UpdateAsync(string identityNumber, CustomerUpdateDto customerUpdateDto,
         CancellationToken cancellationToken = default)
     {
@@ -55,7 +56,7 @@ public class CustomerController:AbpControllerBase
     /// <param name="identityNumber"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    [HttpDelete]
+    [HttpDelete("{identityNumber}")]
     public async Task<bool> DeleteAsync(string identityNumber, CancellationToken cancellationToken = default)
     {
         return await _customerService.DeleteAsync(identityNumber, cancellationToken);
@@ -68,7 +69,7 @@ public class CustomerController:AbpControllerBase
     /// <param name="identityNumber"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    [HttpGet("/get-by-id")]
+    [HttpGet("{identityNumber}")]
     public async Task<CustomerDto> GetByIdAsync(string identityNumber, CancellationToken cancellationToken = default)
     {
         return await _customerService.GetByIdAsync(identityNumber, cancellationToken);

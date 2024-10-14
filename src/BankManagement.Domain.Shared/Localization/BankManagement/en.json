@@ -15,6 +15,19 @@
     "BankManagement.Customer.Phone:00001": "Phone field cannot be empty",
     "BankManagement.Customer.Phone:00002": "Phone field must be 10 characters",
 
-    "BankManagement.Customer.BirthDay:00001": "Birthday field cannot be empty"
+    "BankManagement.Customer.BirthDay:00001": "Birthday field cannot be empty",
+
+
+    //Enums
+
+
+    //Account Types
+    "Enum.AccountTypes.ACC:01": "Deposit",
+    "Enum.AccountTypes.ACC:02": "Checking",
+
+
+    //Card Types
+    "Enum.CardTypes.CAR:01": "Bank Card",
+    "Enum.CardTypes.CAR:02": "Credit Card"
   }
 }

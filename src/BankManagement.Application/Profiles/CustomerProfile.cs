@@ -1,5 +1,6 @@
 using AutoMapper;
 using BankManagement.Dtos;
+using BankManagement.Dtos.Customers;
 using BankManagement.Entities;
 
 namespace BankManagement.Profiles;
@@ -10,7 +11,7 @@ public class CustomerProfile:Profile
     {
         CreateMap<Customer, CustomerDto>()
             .ForMember(x => x.IdentityNumber, a =>
-                a.Ignore())
+                a.MapFrom(c=>c.IdentityNumber))
             .ForMember(x => x.Name, a =>
                 a.MapFrom(c => c.Name))
             .ForMember(x => x.Surname, a =>
@@ -33,7 +34,7 @@ public class CustomerProfile:Profile
 
         public void Process(Customer source, CustomerDto destination, ResolutionContext context)
         {
-            destination.IdentityNumber = source.IdentityNumber;
+            
         }
     }
 }

@@ -1,4 +1,5 @@
 using BankManagement.Dtos;
+using BankManagement.Dtos.Customers;
 using BankManagement.ExceptionCodes;
 using BankManagement.Localization;
 using FluentValidation;

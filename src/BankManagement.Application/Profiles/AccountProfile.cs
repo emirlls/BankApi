@@ -1,8 +1,10 @@
 using AutoMapper;
 using BankManagement.Dtos;
+using BankManagement.Dtos.Accounts;
 using BankManagement.Entities;
 using BankManagement.Enums;
 using BankManagement.Localization;
+using BankManagement.Repositories;
 using Microsoft.Extensions.Localization;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Identity; 
@@ -11,7 +13,6 @@ namespace BankManagement.Profiles;
 
 public class AccountProfile:Profile
 {
-    private readonly IStringLocalizer<BankManagementResource> _stringLocalizer;
     public AccountProfile()
     {
         CreateMap<Account, AccountDto>()
@@ -22,30 +23,37 @@ public class AccountProfile:Profile
             .ForMember(x => x.IsAvailable, a =>
                 a.MapFrom(c => c.IsAvailable))
             .ForMember(x => x.AccountTypeId, a =>
-                a.MapFrom(c => c.AccountTypeId))
-            .ForMember(x => x.AccountType, a =>
-                a.MapFrom(c => (AccountTypes)c.AccountTypeId))
+                a.Ignore())
+            .ForMember(x => x.AccountTypeName, a =>
+                a.Ignore())
             .ForMember(x=>x.CustomerName,a=>
                 a.Ignore())
             .ForMember(x=>x.CustomerSurname,a=>
                 a.Ignore())
+            
             .AfterMap<AccountMappingAction>();
     }
     
     public class AccountMappingAction:IMappingAction<Account,AccountDto>
     {
-        private readonly IIdentityUserRepository _ıdentityUserRepository;
+        private readonly ICustomerRepository _customerRepository;
+        private readonly IStringLocalizer<BankManagementResource> _stringLocalizer;
 
-        public AccountMappingAction(IIdentityUserRepository ıdentityUserRepository)
+        public AccountMappingAction(ICustomerRepository customerRepository, IStringLocalizer<BankManagementResource> stringLocalizer)
         {
-            _ıdentityUserRepository = ıdentityUserRepository;
+            _customerRepository = customerRepository;
+            _stringLocalizer = stringLocalizer;
         }
 
         public void Process(Account source, AccountDto destination, ResolutionContext context)
         {
-            var user = _ıdentityUserRepository.GetAsync(source.CustomerId);
-            destination.CustomerName = user.Result.Name;
-            destination.CustomerSurname = user.Result.Surname;
+            var customer = _customerRepository.FindAsync(x => x.Id.Equals(source.CustomerId)).Result;
+            destination.CustomerName = customer!.Name;
+            destination.CustomerSurname = customer.Surname;
+            var accountTypeId = source.AccountTypeId;
+            destination.AccountTypeId = accountTypeId;
+            destination.AccountTypeName = _stringLocalizer[((AccountTypes)accountTypeId).ToString()].Value;
+
         }
     }
 }

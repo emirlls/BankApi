@@ -12,6 +12,7 @@ public class Card:FullAuditedEntity<Guid>
     public string CardNumber { get; set; }
     public string Cvv { get; set; }
     public int CardTypeId { get; set; }
+    public bool IsActive{ get; set; }
     
     public virtual Account Accounts { get; set; }
     public virtual CardType CardTypes { get; set; }

@@ -13,7 +13,7 @@ using Microsoft.Extensions.Hosting;
 using BankManagement.EntityFrameworkCore;
 using BankManagement.Extensions;
 using BankManagement.MultiTenancy;
-using StackExchange.Redis;
+//using StackExchange.Redis;
 using Microsoft.OpenApi.Models;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Authentication.JwtBearer;
@@ -23,7 +23,7 @@ using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.Autofac;
 using Volo.Abp.Caching;
-using Volo.Abp.Caching.StackExchangeRedis;
+//using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.PostgreSql;
 using Volo.Abp.Localization;
@@ -45,7 +45,7 @@ namespace BankManagement;
     typeof(AbpAspNetCoreMvcUiMultiTenancyModule),
     typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
     typeof(AbpAutofacModule),
-    typeof(AbpCachingStackExchangeRedisModule),
+    //typeof(AbpCachingStackExchangeRedisModule),
     typeof(AbpEntityFrameworkCorePostgreSqlModule),
     typeof(AbpAuditLoggingEntityFrameworkCoreModule),
     typeof(AbpPermissionManagementEntityFrameworkCoreModule),
@@ -61,6 +61,7 @@ public class BankManagementHttpApiHostModule : AbpModule
         base.PreConfigureServices(context);
         AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
         ServiceConfigurationContextExtension.ResolveSchemaAndPrefix();
+        
     }
 
     public override void ConfigureServices(ServiceConfigurationContext context)
@@ -139,12 +140,12 @@ public class BankManagementHttpApiHostModule : AbpModule
             options.KeyPrefix = "BankManagement:";
         });
 
-        var dataProtectionBuilder = context.Services.AddDataProtection().SetApplicationName("BankManagement");
+        /*var dataProtectionBuilder = context.Services.AddDataProtection().SetApplicationName("BankManagement");
         if (!hostingEnvironment.IsDevelopment())
         {
             var redis = ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]!);
             dataProtectionBuilder.PersistKeysToStackExchangeRedis(redis, "BankManagement-Protection-Keys");
-        }
+        }*/
 
         context.Services.AddCors(options =>
         {

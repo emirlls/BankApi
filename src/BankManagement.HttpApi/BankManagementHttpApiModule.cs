@@ -18,6 +18,7 @@ public class BankManagementHttpApiModule : AbpModule
         {
             mvcBuilder.AddApplicationPartIfNotExists(typeof(BankManagementHttpApiModule).Assembly);
         });
+        
     }
 
     public override void ConfigureServices(ServiceConfigurationContext context)

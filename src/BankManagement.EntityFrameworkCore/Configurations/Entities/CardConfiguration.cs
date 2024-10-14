@@ -24,5 +24,7 @@ public class CardConfiguration:IEntityTypeConfiguration<Card>
             .WithMany(x=>x.Cards)
             .HasForeignKey(x => x.CardTypeId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Property(x => x.IsActive).HasDefaultValue(true);
     }
 }

@@ -1,6 +1,6 @@
 using System;
 
-namespace BankManagement.Dtos;
+namespace BankManagement.Dtos.Customers;
 
 public class CustomerDto
 {
