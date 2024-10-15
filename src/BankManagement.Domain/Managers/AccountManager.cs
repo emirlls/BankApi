@@ -13,11 +13,9 @@ namespace BankManagement.Managers;
 
 public class AccountManager : DomainService
 {
-    private readonly IRepository<Account, Guid> _accountRepository;
 
-    public AccountManager(IRepository<Account, Guid> accountRepository)
+    public AccountManager()
     {
-        _accountRepository = accountRepository;
     }
 
     public Account Create(
@@ -38,4 +36,20 @@ public class AccountManager : DomainService
         };
     }
     
+    
+    public Account Update(
+        Account account,
+        string iban,
+        int accountTypeId,
+        bool isAvailable,
+        float balance
+    )
+    {
+        account.Iban = iban;
+        account.AccountTypeId = accountTypeId;
+        account.IsAvailable = isAvailable;
+        account.Balance = balance;
+        return account;
+    }
+
 }

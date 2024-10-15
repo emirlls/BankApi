@@ -4,8 +4,8 @@ namespace BankManagement.Enums;
 
 public enum AccountTypes
 {
-    [Description("STT:01")]   //Vadeli
+    [Description("AccountTypes.ACC:01")]   //Vadeli
     Deposite = 1,
-    [Description("STT:02")]   //Vadesiz
+    [Description("AccountTypes.ACC:02")]   //Vadesiz
     Checking = 2,
 }

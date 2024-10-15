@@ -15,7 +15,18 @@
     "BankManagement.Customer.Phone:00001": "Telefon no alanı boş olamaz",
     "BankManagement.Customer.Phone:00002": "Telefon no alanı 10 karakteri geçemez",
 
-    "BankManagement.Customer.BirthDay:00001": "Doğum tarihi alanı boş olamaz"
+    "BankManagement.Customer.BirthDay:00001": "Doğum tarihi alanı boş olamaz",
     
+    
+    //Enums
+    
+    
+    //Account Types
+    "BankManagement.Enums.AccountTypes.ACC:01": "Vadeli",
+    "BankManagement.Enums.AccountTypes.ACC:02": "Vadesiz",
+    
+    //Card Types
+    "BankManagement.Enums.CardTypes.CAR:01": "Banka Kartı",
+    "BankManagement.Enums.CardTypes.CAR:02": "Kredi Kartı"
   }
 }

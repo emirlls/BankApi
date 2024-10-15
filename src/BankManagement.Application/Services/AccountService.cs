@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using BankManagement.Dtos;
+using BankManagement.Dtos.Accounts;
 using BankManagement.Entities;
 using BankManagement.ExceptionCodes;
 using BankManagement.Interfaces;
@@ -33,7 +35,7 @@ public class AccountService:ApplicationService,IAccountService
         CancellationToken cancellationToken = default
     )
     {
-        var customer = await _customerRepository.GetAsync(x => x.Id.Equals(accountCreateDto.CustomerId));
+        var customer = await _customerRepository.FindAsync(x => x.Id.Equals(accountCreateDto.CustomerId), cancellationToken: cancellationToken);
         if (customer == null)
         {
             throw new UserFriendlyException(_stringLocalizer[CustomerExceptionCodes.NotFound]);
@@ -46,15 +48,55 @@ public class AccountService:ApplicationService,IAccountService
             accountCreateDto.Balance, 
             accountCreateDto.IsAvailable);
 
-        await _accountRepository.InsertAsync(account, cancellationToken: cancellationToken);
+        await _accountRepository.InsertAsync(account, true,cancellationToken: cancellationToken);
         return ObjectMapper.Map<Account, AccountDto>(account);
     }
+
+    public async Task<AccountDto> UpdateAsync(Guid id,AccountUpdateDto accountUpdateDto, CancellationToken cancellationToken = default)
+    {
+        var account = await _accountRepository.FindAsync(x => x.Id.Equals(id), cancellationToken: cancellationToken);
+        if (account == null)
+        {
+            throw new UserFriendlyException(_stringLocalizer[AccountExceptionCodes.NotFound]);
+        }
+
+        _accountManager.Update(account, accountUpdateDto.Iban, accountUpdateDto.AccountTypeId,
+            accountUpdateDto.IsAvailable, accountUpdateDto.Balance);
+        await _accountRepository.UpdateAsync(account, cancellationToken: cancellationToken);
+
+        return ObjectMapper.Map<Account, AccountDto>(account);
+    }
+
+    public async Task<bool> DeleteAsync(Guid id,CancellationToken cancellationToken = default)
+    {
+        var account = await _accountRepository.FindAsync(x => x.Id.Equals(id), cancellationToken: cancellationToken);
+        if (account == null)
+        {
+            throw new UserFriendlyException(_stringLocalizer[AccountExceptionCodes.NotFound]);
+        }
+
+        await _accountRepository.DeleteAsync(account, cancellationToken: cancellationToken);
+        return true;
+    }
+
+    public async Task<List<AccountDto>> GetListAsync(CancellationToken cancellationToken)
+    {
+        var accounts = await _accountRepository.GetListAsync(x => x.IsAvailable.Equals(true), cancellationToken: cancellationToken);
+
+        return ObjectMapper.Map<List<Account>,List<AccountDto>>(accounts);
+    }
+
     public async Task<AccountDto> GetByIdAsync(
         Guid id, 
         CancellationToken cancellationToken = default
     )
     {
-        var account = await _accountRepository.GetAsync(x => x.Id.Equals(id), cancellationToken: cancellationToken);
+        var account = await _accountRepository.FindAsync(x => x.Id.Equals(id), cancellationToken: cancellationToken);
+        if (account == null)
+        {
+            throw new UserFriendlyException(_stringLocalizer[AccountExceptionCodes.NotFound]);
+        }
+
         return ObjectMapper.Map<Account, AccountDto>(account);
     }
 }

@@ -8,10 +8,14 @@ namespace BankManagement.Entities;
 public class Card:FullAuditedEntity<Guid>
 {
     public Guid AccountId { get; set; } 
-    public string CardOwner { get; set; }
     public string CardNumber { get; set; }
     public string Cvv { get; set; }
     public int CardTypeId { get; set; }
+    
+    public float? CardLimit { get; set; }
+    
+    public float Balance { get; set; }
+    public bool IsActive{ get; set; }
     
     public virtual Account Accounts { get; set; }
     public virtual CardType CardTypes { get; set; }

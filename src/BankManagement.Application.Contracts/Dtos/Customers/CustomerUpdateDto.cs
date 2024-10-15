@@ -1,4 +1,4 @@
-namespace BankManagement.Dtos;
+namespace BankManagement.Dtos.Customers;
 
 public class CustomerUpdateDto
 {
