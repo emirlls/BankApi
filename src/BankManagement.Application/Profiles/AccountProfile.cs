@@ -3,6 +3,7 @@ using BankManagement.Dtos;
 using BankManagement.Dtos.Accounts;
 using BankManagement.Entities;
 using BankManagement.Enums;
+using BankManagement.Extensions;
 using BankManagement.Localization;
 using BankManagement.Repositories;
 using Microsoft.Extensions.Localization;
@@ -52,7 +53,7 @@ public class AccountProfile:Profile
             destination.CustomerSurname = customer.Surname;
             var accountTypeId = source.AccountTypeId;
             destination.AccountTypeId = accountTypeId;
-            destination.AccountTypeName = _stringLocalizer[((AccountTypes)accountTypeId).ToString()].Value;
+            destination.AccountTypeName = _stringLocalizer[((AccountTypes)accountTypeId).GetDescription()];
 
         }
     }

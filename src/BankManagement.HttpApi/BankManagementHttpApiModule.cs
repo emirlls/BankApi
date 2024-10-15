@@ -1,9 +1,13 @@
-﻿using Localization.Resources.AbpUi;
+﻿using System.Threading.Tasks;
+using BankManagement.Extensions;
+using Localization.Resources.AbpUi;
 using BankManagement.Localization;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Localization;
+using Volo.Abp;
 
 namespace BankManagement;
 
@@ -29,5 +33,11 @@ public class BankManagementHttpApiModule : AbpModule
                 .Get<BankManagementResource>()
                 .AddBaseTypes(typeof(AbpUiResource));
         });
+    }
+    
+    public override Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
+    {
+        GlobalLocalizationProvider.SetLocalizer(context.ServiceProvider.GetRequiredService<IStringLocalizer<BankManagementResource>>());
+        return base.OnApplicationInitializationAsync(context);
     }
 }

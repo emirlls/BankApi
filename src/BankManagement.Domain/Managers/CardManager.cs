@@ -13,39 +13,31 @@ public class CardManager:DomainService
 
     public Card Create(
         Guid accountId, 
-        string cardOwner, 
         string cardNumber, 
         string cvv, 
         int cardTypeId,
+        float cardLimit,
         bool isActive
     )
     {
         return new Card(GuidGenerator.Create())
         {
             AccountId = accountId,
-            CardOwner = cardOwner,
             CardNumber = cardNumber,
             Cvv = cvv,
             CardTypeId = cardTypeId,
+            Balance = 0,
+            CardLimit = cardLimit,
             IsActive = isActive
         };
     }
     
     public Card Update(
         Card card, 
-        string cardOwner, 
-        string cardNumber, 
-        string cvv, 
-        int cardTypeId,
         bool isActive
     )
     {
-        card.CardOwner = cardOwner;
-        card.CardNumber = cardNumber;
-        card.Cvv = cvv;
-        card.CardTypeId = cardTypeId;
         card.IsActive = isActive;
-
         return card;
     }
     

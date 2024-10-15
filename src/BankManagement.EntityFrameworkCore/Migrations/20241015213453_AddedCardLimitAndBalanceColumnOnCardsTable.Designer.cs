@@ -13,8 +13,8 @@ using Volo.Abp.EntityFrameworkCore;
 namespace BankManagement.Migrations
 {
     [DbContext(typeof(BankManagementDbContext))]
-    [Migration("20240927214735_Initial")]
-    partial class Initial
+    [Migration("20241015213453_AddedCardLimitAndBalanceColumnOnCardsTable")]
+    partial class AddedCardLimitAndBalanceColumnOnCardsTable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -95,11 +95,13 @@ namespace BankManagement.Migrations
                     b.Property<Guid>("AccountId")
                         .HasColumnType("uuid");
 
-                    b.Property<string>("CardNumber")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<float>("Balance")
+                        .HasColumnType("real");
 
-                    b.Property<string>("CardOwner")
+                    b.Property<float?>("CardLimit")
+                        .HasColumnType("real");
+
+                    b.Property<string>("CardNumber")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -125,6 +127,11 @@ namespace BankManagement.Migrations
                     b.Property<DateTime?>("DeletionTime")
                         .HasColumnType("timestamp without time zone")
                         .HasColumnName("DeletionTime");
+
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(true);
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()

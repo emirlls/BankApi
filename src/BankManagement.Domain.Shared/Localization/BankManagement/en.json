@@ -22,12 +22,12 @@
 
 
     //Account Types
-    "Enum.AccountTypes.ACC:01": "Deposit",
-    "Enum.AccountTypes.ACC:02": "Checking",
-
+    "BankManagement.Enums.AccountTypes.ACC:01": "Deposit",
+    "BankManagement.Enums.AccountTypes.ACC:02": "Checking",
 
     //Card Types
-    "Enum.CardTypes.CAR:01": "Bank Card",
-    "Enum.CardTypes.CAR:02": "Credit Card"
+
+    "BankManagement.Enums.CardTypes.CAR:01": "Bank Card",
+    "BankManagement.Enums.CardTypes.CAR:02": "Credit Card"
   }
 }

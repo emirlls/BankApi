@@ -3,6 +3,7 @@ using System;
 using BankManagement.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Volo.Abp.EntityFrameworkCore;
@@ -12,9 +13,11 @@ using Volo.Abp.EntityFrameworkCore;
 namespace BankManagement.Migrations
 {
     [DbContext(typeof(BankManagementDbContext))]
-    partial class BankManagementDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241015211443_DeletedCardOwnerColumnOnCardsTable")]
+    partial class DeletedCardOwnerColumnOnCardsTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -91,12 +94,6 @@ namespace BankManagement.Migrations
 
                     b.Property<Guid>("AccountId")
                         .HasColumnType("uuid");
-
-                    b.Property<float>("Balance")
-                        .HasColumnType("real");
-
-                    b.Property<float?>("CardLimit")
-                        .HasColumnType("real");
 
                     b.Property<string>("CardNumber")
                         .IsRequired()

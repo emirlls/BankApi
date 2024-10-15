@@ -22,13 +22,11 @@
     
     
     //Account Types
-    "Enum.AccountTypes.ACC:01": "Vadeli",
-    "Enum.AccountTypes.ACC:02": "Vadesiz",
-    
+    "BankManagement.Enums.AccountTypes.ACC:01": "Vadeli",
+    "BankManagement.Enums.AccountTypes.ACC:02": "Vadesiz",
     
     //Card Types
-    "Enum.CardTypes.CAR:01": "Banka Kartı",
-    "Enum.CardTypes.CAR:02": "Kredi Kartı"
-    
+    "BankManagement.Enums.CardTypes.CAR:01": "Banka Kartı",
+    "BankManagement.Enums.CardTypes.CAR:02": "Kredi Kartı"
   }
 }

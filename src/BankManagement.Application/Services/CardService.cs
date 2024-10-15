@@ -6,7 +6,6 @@ using BankManagement.Dtos.Cards;
 using BankManagement.Entities;
 using BankManagement.Enums;
 using BankManagement.ExceptionCodes;
-using BankManagement.Interfaces;
 using BankManagement.Localization;
 using BankManagement.Managers;
 using BankManagement.Repositories;
@@ -41,27 +40,19 @@ public class CardService:ApplicationService,ICardService
         {
             throw new UserFriendlyException(_stringLocalizer[AccountExceptionCodes.NotFound]);
         }
-        
-        var customer = await _customerRepository.GetAsync(x => x.Id.Equals(account.CustomerId), cancellationToken: cancellationToken);
-        var cardOwner = $"{customer.Name} {customer.Surname}";
-        cardCreateDto.CardOwner = cardOwner;
-        var card = _cardManager.Create(account.Id, cardCreateDto.CardOwner, cardCreateDto.CardNumber, cardCreateDto.Cvv,
-            cardCreateDto.CardTypeId, cardCreateDto.IsActive);
+
+        if (cardCreateDto.CardTypeId == (int)CardTypes.Bank)
+        {
+            cardCreateDto.CardLimit = 0;
+            
+        }
+        var card = _cardManager.Create(account.Id, cardCreateDto.CardNumber, cardCreateDto.Cvv,
+            cardCreateDto.CardTypeId, cardCreateDto.CardLimit,cardCreateDto.IsActive);
 
         await _cardRepository.InsertAsync(card, cancellationToken: cancellationToken);
 
         return ObjectMapper.Map<Card, CardCommonDto>(card);
         
-        /*return new CardCommonDto()
-        {
-            AccountId = card.AccountId,
-            CardNumber = card.CardNumber,
-            CardOwner = card.CardOwner,
-            CardTypeId = card.CardTypeId,
-            CardTypeName = card.CardTypes.Name,
-            Cvv = card.Cvv,
-            IsActive = card.IsActive
-        };*/
     }
 
     public async Task<CardCommonDto> UpdateAsync(Guid id, CardUpdateDto cardUpdateDto, CancellationToken cancellationToken = default)
@@ -72,22 +63,15 @@ public class CardService:ApplicationService,ICardService
             throw new UserFriendlyException(_stringLocalizer[CardExceptionCodes.NotFound]);
         }
 
-        _cardManager.Update(card, cardUpdateDto.CardOwner, cardUpdateDto.CardNumber, cardUpdateDto.Cvv,
-            cardUpdateDto.CardTypeId, cardUpdateDto.IsActive);
+        if (card.CardTypeId == (int)CardTypes.Bank)
+        {
+            cardUpdateDto.CardLimit = 0;
+        }
+        _cardManager.Update(card, cardUpdateDto.IsActive);
 
         await _cardRepository.UpdateAsync(card, cancellationToken: cancellationToken);
         return ObjectMapper.Map<Card, CardCommonDto>(card);
         
-        /*return new CardCommonDto()
-        {
-            AccountId = card.AccountId,
-            CardNumber = card.CardNumber,
-            CardOwner = card.CardOwner,
-            CardTypeId = card.CardTypeId,
-            CardTypeName = card.CardTypes.Name,
-            Cvv = card.Cvv,
-            IsActive = card.IsActive
-        };*/
     }
 
     public async Task<bool> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
@@ -112,16 +96,6 @@ public class CardService:ApplicationService,ICardService
         
         return ObjectMapper.Map<Card, CardCommonDto>(card);
         
-        /*return new CardCommonDto()
-        {
-            AccountId = card.AccountId,
-            CardNumber = card.CardNumber,
-            CardOwner = card.CardOwner,
-            CardTypeId = card.CardTypeId,
-            CardTypeName = card.CardTypes.Name,
-            Cvv = card.Cvv,
-            IsActive = card.IsActive
-        };*/
     }
 
     public async Task<List<CardCommonDto>> GetListAsync(CancellationToken cancellationToken = default)
