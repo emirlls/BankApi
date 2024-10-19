@@ -6,20 +6,29 @@
     
     "BankManagement.Customer:00001": "Müşteri bulunamadı",
     "BankManagement.Customer:00002": "Müşteri zaten var",
-
     "BankManagement.Customer.IdentityNumber:00001": "Kimlik no alanı boş olamaz",
     "BankManagement.Customer.IdentityNumber:00002": "Kimlik no alanı 11 karakteri geçemez",
-
     "BankManagement.Customer.Name:00001": "Ad alanı boş olamaz",
     "BankManagement.Customer.Surname:00001": "Soyad alanı boş olamaz",
     "BankManagement.Customer.Phone:00001": "Telefon no alanı boş olamaz",
     "BankManagement.Customer.Phone:00002": "Telefon no alanı 10 karakteri geçemez",
-
     "BankManagement.Customer.BirthDay:00001": "Doğum tarihi alanı boş olamaz",
+
+
+    "BankManagement.Account:00001": "Hesap bulunamadı",
+    "BankManagement.Account:00002": "Hesap zaten var",
+    "BankManagement.Account.Iban:00001": "Iban alanı boş olamaz",
+    "BankManagement.Account.Iban:00002": "Bu iban kullanılmış",
+
+    
+    "BankManagement.Card:00001": "Kart bulunamadı",
+    "BankManagement.Card:00002": "Kart zaten var",
+
+    "BankManagement.Transaction:00001": "Transaction bulunamadı",
+    "BankManagement.Transaction:00002": "Transaction zaten var",
     
     
     //Enums
-    
     
     //Account Types
     "BankManagement.Enums.AccountTypes.ACC:01": "Vadeli",
@@ -27,6 +36,12 @@
     
     //Card Types
     "BankManagement.Enums.CardTypes.CAR:01": "Banka Kartı",
-    "BankManagement.Enums.CardTypes.CAR:02": "Kredi Kartı"
+    "BankManagement.Enums.CardTypes.CAR:02": "Kredi Kartı",
+
+    //Transaction Types
+    "BankManagement.Enums.TransactionTypes.TRA:01": "Hesaptan hesaba",
+    "BankManagement.Enums.TransactionTypes.TRA:02": "Hesaptan karta",
+    "BankManagement.Enums.TransactionTypes.TRA:03": "Karttan hesaba",
+    "BankManagement.Enums.TransactionTypes.TRA:04": "Karttan karta"
   }
 }
