@@ -13,10 +13,9 @@ public class TransactionConfiguration:IEntityTypeConfiguration<Transaction>
     {
         builder.ToTable(builder.GetTableName(),BankManagementDatabaseConstants.SchemaName);
         builder.ConfigureByConvention();
-        
-        builder.HasOne(x => x.Account)
-            .WithMany(x=>x.Transactions)
-            .HasForeignKey(x => x.AccountId)
-            .OnDelete(DeleteBehavior.Restrict);
+        builder.HasOne(x => x.TransactionType)
+            .WithMany()
+            .HasForeignKey(x => x.TransactionTypeId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }
