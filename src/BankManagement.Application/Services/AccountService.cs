@@ -40,6 +40,12 @@ public class AccountService:ApplicationService,IAccountService
         {
             throw new UserFriendlyException(_stringLocalizer[CustomerExceptionCodes.NotFound]);
         }
+
+        var alreadyExistsIban = await _accountRepository.FindAsync(x => x.Iban.Equals(accountCreateDto.Iban), cancellationToken: cancellationToken);
+        if (alreadyExistsIban != null)
+        {
+            throw new UserFriendlyException(_stringLocalizer[AccountExceptionCodes.Iban.AlreadyExists]);
+        }
         
         var account = _accountManager.Create(
             accountCreateDto.CustomerId, 
