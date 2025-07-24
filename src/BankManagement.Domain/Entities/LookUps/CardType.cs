@@ -1,13 +1,13 @@
+using System;
 using System.Collections.Generic;
-using BankManagement.Interfaces;
-using Volo.Abp.Domain.Entities.Auditing;
 
 namespace BankManagement.Entities.LookUps;
 
-public class CardType:CreationAuditedEntity<int>,ILookup
+public class CardType : LookupBaseEntity
 {
-    public string Name { get; set; }
-    public bool IsActive { get; set; }
-    
     public ICollection<Card> Cards { get; set; }
+
+    public CardType(Guid id, Guid? tenantId, DateTime creationTime) : base(id, tenantId, creationTime)
+    {
+    }
 }

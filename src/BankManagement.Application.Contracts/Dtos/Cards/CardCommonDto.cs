@@ -1,5 +1,3 @@
-using System;
-
 namespace BankManagement.Dtos.Cards;
 
 public class CardCommonDto:CardCreateDto

@@ -1,5 +1,4 @@
 using BankManagement.Samples;
-using Xunit;
 
 namespace BankManagement.EntityFrameworkCore.Domains;
 

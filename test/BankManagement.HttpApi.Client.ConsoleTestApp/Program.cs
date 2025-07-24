@@ -1,9 +1,8 @@
 ﻿using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace BankManagement.HttpApi.Client.ConsoleTestApp;
+namespace BankManagement;
 
 class Program
 {

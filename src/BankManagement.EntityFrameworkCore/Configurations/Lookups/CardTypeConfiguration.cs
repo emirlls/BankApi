@@ -13,7 +13,6 @@ public class CardTypeConfiguration:IEntityTypeConfiguration<CardType>
     {
         builder.ToTable(builder.GetTableName(),BankManagementDatabaseConstants.SchemaName);
         builder.ConfigureByConvention();
-
-        builder.HasKey(x => x.Id);
+        
     }
 }

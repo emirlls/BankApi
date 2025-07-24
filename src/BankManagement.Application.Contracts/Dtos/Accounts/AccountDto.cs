@@ -5,7 +5,7 @@ public class AccountDto
     public string CustomerName { get; set; }
     public string CustomerSurname { get; set; }
     public string Iban { get; set; }
-    public int AccountTypeId { get; set; }
+    public int AccountTypeCode { get; set; }
     public string AccountTypeName { get; set; }
     public bool IsAvailable { get; set; }
     public float Balance { get; set; }

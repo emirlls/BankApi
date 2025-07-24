@@ -1,22 +1,27 @@
 using System;
+using BankManagement.Entities.LookUps;
 using Volo.Abp.Domain.Entities.Auditing;
+using Volo.Abp.MultiTenancy;
 
 namespace BankManagement.Entities;
 
-public class Transaction : FullAuditedEntity<Guid>
+public class Transaction : FullAuditedEntity<Guid>, IMultiTenant
 {
-    public Guid AccountId { get; set; }
-    public string SendIban { get; set; }
+    public Guid? TenantId { get; }
+    public string SenderIban { get; set; }
+    public string ReceiverIban { get; set; }
     public float Balance { get; set; }
-    public virtual Account Account { get; set; }
-
+    public Guid TransactionTypeId { get; set; }
+    public virtual TransactionType TransactionType { get; set; }
     public Transaction()
     {
         
     }
-    public Transaction(Guid id)
+    public Transaction(Guid id,Guid? tenantId, DateTime creationTime)
     {
         Id = id;
-        
+        TenantId = tenantId;
+        CreationTime = creationTime;
     }
+
 }

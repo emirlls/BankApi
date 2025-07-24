@@ -14,6 +14,5 @@ public class AccountTypeConfiguration:IEntityTypeConfiguration<AccountType>
         builder.ToTable(builder.GetTableName(),BankManagementDatabaseConstants.SchemaName);
         builder.ConfigureByConvention();
 
-        builder.HasKey(x => x.Id);
     }
 }

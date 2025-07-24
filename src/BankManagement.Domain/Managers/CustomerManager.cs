@@ -1,21 +1,18 @@
 using System;
 using BankManagement.Entities;
-using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Domain.Services;
 
 namespace BankManagement.Managers;
 
-public class CustomerManager:DomainService
+public class CustomerManager : DomainService
 {
-
     public CustomerManager()
     {
-        
     }
 
 
     public Customer Create(
-        string identityNumber, 
+        string identityNumber,
         string name,
         string surname,
         string mail,
@@ -23,7 +20,7 @@ public class CustomerManager:DomainService
         DateTime birthday
     )
     {
-        return new Customer(GuidGenerator.Create())
+        return new Customer(GuidGenerator.Create(), CurrentTenant.Id, DateTime.Now)
         {
             IdentityNumber = identityNumber,
             Name = name,
