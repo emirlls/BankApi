@@ -32,8 +32,12 @@ public class TransactionBackgroundJob : BankManagementAppService
                 .GetListAsync(x => x.CreationTime < DateTime.Today.Date);
             var transactionElasticModel =
                 ObjectMapper.Map<List<Transaction>, List<TransactionElasticModel>>(oldTransactions);
-
-            await _elasticClient.IndexManyAsync(transactionElasticModel, ElasticSearchConstants.Transaction.TransactionIndex);
+            await _elasticClient.DeleteByQueryAsync<TransactionElasticModel>(q =>
+                q.Index(ElasticSearchConstants.Transaction.TransactionIndex)
+                    .Query(q => q.MatchAll())
+            );
+            await _elasticClient.IndexManyAsync(transactionElasticModel,
+                ElasticSearchConstants.Transaction.TransactionIndex);
             await _transactionRepository.DeleteManyAsync(oldTransactions);
         }
         catch (Exception e)
