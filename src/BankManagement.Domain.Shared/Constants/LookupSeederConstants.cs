@@ -16,9 +16,7 @@ public static class LookupSeederConstants
     
     public static class TransactionTypes
     {
-        public const string AccountToAccount = "6707cd60-afa6-4be8-ad69-53436ae92aa3";
-        public const string AccountToCard = "586dee74-6c05-4f4f-bd00-51724d0fe571";
-        public const string CardToAccount = "773ce647-3ec2-4e6e-9eec-3ba8fce2c33a";
-        public const string CardToCard = "6c31cd15-a33f-4564-956f-5d87d0c6a4fe";
+        public const string ToAccount = "6707cd60-afa6-4be8-ad69-53436ae92aa3";
+        public const string ToCard = "586dee74-6c05-4f4f-bd00-51724d0fe571";
     }
 }
