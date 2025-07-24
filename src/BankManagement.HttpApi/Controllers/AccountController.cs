@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using BankManagement.Dtos;
+using BankManagement.Attributes;
+using BankManagement.Constants;
 using BankManagement.Dtos.Accounts;
 using BankManagement.Services;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BankManagement.Controllers;
@@ -22,6 +22,24 @@ public class AccountController
         _accountService = accountService;
     }
 
+    /// <summary>
+    /// Used to get list of accounts
+    /// </summary>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    [HttpGet]
+    [CacheManagement<AccountDto>(CacheModelConstants.AccountCacheModel)]
+    public async Task<List<AccountDto>> GetListAsync(CancellationToken cancellationToken = default)
+    {
+        return await _accountService.GetListAsync(cancellationToken);
+    }
+    
+    /// <summary>
+    /// Used to get the accounts with id
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     [HttpGet("{id}")]
     public async Task<AccountDto> GetByIdAsync(
         Guid id, 
@@ -31,29 +49,45 @@ public class AccountController
         return await _accountService.GetByIdAsync(id,cancellationToken);
     }
 
+    /// <summary>
+    /// Used to create account
+    /// </summary>
+    /// <param name="accountCreateDto"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     [HttpPost]
-    public async Task<AccountDto> CreateAsync(AccountCreateDto accountCreateDto,
+    [CacheClear<AccountDto>(CacheModelConstants.AccountCacheModel)]
+    public async Task<bool> CreateAsync(AccountCreateDto accountCreateDto,
         CancellationToken cancellationToken = default)
     {
         return await _accountService.CreateAsync(accountCreateDto, cancellationToken);
     }
 
+    /// <summary>
+    /// Used to update account
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="accountUpdateDto"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     [HttpPut("{id}")]
-    public async Task<AccountDto> UpdateAsync(Guid id,AccountUpdateDto accountUpdateDto,
+    [CacheClear<AccountDto>(CacheModelConstants.AccountCacheModel)]
+    public async Task<bool> UpdateAsync(Guid id,AccountUpdateDto accountUpdateDto,
         CancellationToken cancellationToken = default)
     {
         return await _accountService.UpdateAsync(id,accountUpdateDto, cancellationToken);
     }
 
+    /// <summary>
+    /// Used to delete account
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     [HttpDelete("{id}")]
+    [CacheClear<AccountDto>(CacheModelConstants.AccountCacheModel)]
     public async Task<bool> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
     {
         return await _accountService.DeleteAsync(id, cancellationToken);
-    }
-
-    [HttpGet]
-    public async Task<List<AccountDto>> GetListAsync(CancellationToken cancellationToken = default)
-    {
-        return await _accountService.GetListAsync(cancellationToken);
     }
 }

@@ -1,12 +1,5 @@
 using System;
-using System.Threading.Tasks;
-using BankManagement.Constants;
 using BankManagement.Entities;
-using BankManagement.ExceptionCodes;
-using BankManagement.Localization;
-using BankManagement.Repositories;
-using Microsoft.Extensions.Localization;
-using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Domain.Services;
 
 namespace BankManagement.Managers;
@@ -20,13 +13,13 @@ public class AccountManager : DomainService
 
     public Account Create(
         Guid customerId, 
+        Guid accountTypeId, 
         string iban, 
-        int accountTypeId, 
         float balance, 
         bool isAvailable
         )
     {
-        return new Account(GuidGenerator.Create())
+        return new Account(GuidGenerator.Create(),CurrentTenant.Id,DateTime.Now)
         {
             CustomerId = customerId,
             Iban = iban,
@@ -39,8 +32,8 @@ public class AccountManager : DomainService
     
     public Account Update(
         Account account,
+        Guid accountTypeId,
         string iban,
-        int accountTypeId,
         bool isAvailable,
         float balance
     )

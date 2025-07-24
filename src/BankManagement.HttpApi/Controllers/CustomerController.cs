@@ -1,7 +1,8 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using BankManagement.Dtos;
+using BankManagement.Attributes;
+using BankManagement.Constants;
 using BankManagement.Dtos.Customers;
 using BankManagement.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -21,50 +22,20 @@ public class CustomerController:AbpControllerBase
     {
         _customerService = customerService;
     }
-
     /// <summary>
-    /// Using for create a customer
+    /// Using to get list of customers
     /// </summary>
-    /// <param name="customerDto"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    [HttpPost]
-    public async Task<CustomerDto> CreateAsync(CustomerDto customerDto, CancellationToken cancellationToken = default)
+    [HttpGet]
+    [CacheManagement<CustomerDto>(CacheModelConstants.CustomerCacheModel)]
+    public async Task<List<CustomerDto>> GetListAsync(CancellationToken cancellationToken = default)
     {
-        return await _customerService.CreateAsync(customerDto, cancellationToken);
+        return await _customerService.GetListAsync(cancellationToken);
     }
-
     
     /// <summary>
-    /// Using for update a customer that given his identity number
-    /// </summary>
-    /// <param name="identityNumber"></param>
-    /// <param name="customerUpdateDto"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
-    [HttpPut("{identityNumber}")]
-    public async Task<CustomerDto> UpdateAsync(string identityNumber, CustomerUpdateDto customerUpdateDto,
-        CancellationToken cancellationToken = default)
-    {
-        return await _customerService.UpdateAsync(identityNumber, customerUpdateDto, cancellationToken);
-    }
-
-    
-    /// <summary>
-    /// Using for delete a customer that given his identity number
-    /// </summary>
-    /// <param name="identityNumber"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
-    [HttpDelete("{identityNumber}")]
-    public async Task<bool> DeleteAsync(string identityNumber, CancellationToken cancellationToken = default)
-    {
-        return await _customerService.DeleteAsync(identityNumber, cancellationToken);
-    }
-
-    
-    /// <summary>
-    /// Using for get a customer that given his identity number
+    /// Using to get customer with identity number
     /// </summary>
     /// <param name="identityNumber"></param>
     /// <param name="cancellationToken"></param>
@@ -74,16 +45,47 @@ public class CustomerController:AbpControllerBase
     {
         return await _customerService.GetByIdAsync(identityNumber, cancellationToken);
     }
-    
-    
+
     /// <summary>
-    /// Using for customer list
+    /// Using to create a customer
     /// </summary>
+    /// <param name="customerDto"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    [HttpGet("/get-customers-list")]
-    public async Task<List<CustomerDto>> GetListAsync(CancellationToken cancellationToken = default)
+    [HttpPost]
+    [CacheClear<CustomerDto>(CacheModelConstants.CustomerCacheModel)]
+    public async Task<CustomerDto> CreateAsync(CustomerDto customerDto, CancellationToken cancellationToken = default)
     {
-        return await _customerService.GetListAsync(cancellationToken);
+        return await _customerService.CreateAsync(customerDto, cancellationToken);
+    }
+
+    
+    /// <summary>
+    /// Using to update a customer that given his identity number
+    /// </summary>
+    /// <param name="identityNumber"></param>
+    /// <param name="customerUpdateDto"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    [HttpPut("{identityNumber}")]
+    [CacheClear<CustomerDto>(CacheModelConstants.CustomerCacheModel)]
+    public async Task<CustomerDto> UpdateAsync(string identityNumber, CustomerUpdateDto customerUpdateDto,
+        CancellationToken cancellationToken = default)
+    {
+        return await _customerService.UpdateAsync(identityNumber, customerUpdateDto, cancellationToken);
+    }
+
+    
+    /// <summary>
+    /// Using to delete a customer that given his identity number
+    /// </summary>
+    /// <param name="identityNumber"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    [HttpDelete("{identityNumber}")]
+    [CacheClear<CustomerDto>(CacheModelConstants.CustomerCacheModel)]
+    public async Task<bool> DeleteAsync(string identityNumber, CancellationToken cancellationToken = default)
+    {
+        return await _customerService.DeleteAsync(identityNumber, cancellationToken);
     }
 }

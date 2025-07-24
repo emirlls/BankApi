@@ -2,23 +2,25 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using IdentityModel;
+using BankManagement.Constants;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors;
-using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using BankManagement.EntityFrameworkCore;
 using BankManagement.Extensions;
+using BankManagement.Models.ElasticSearchModel;
 using BankManagement.MultiTenancy;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using Microsoft.Extensions.Caching.StackExchangeRedis;
 //using StackExchange.Redis;
 using Microsoft.OpenApi.Models;
+using Nest;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Authentication.JwtBearer;
 using Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy;
-using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.Autofac;
@@ -30,7 +32,6 @@ using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
-using Volo.Abp.Security.Claims;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.Swashbuckle;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
@@ -74,6 +75,20 @@ public class BankManagementHttpApiHostModule : AbpModule
             options.UseNpgsql();
         });
 
+        Configure<RedisCacheOptions>(options =>
+        {
+            options.Configuration = context.Services
+                .GetConfiguration()
+                .GetSection("Redis")["Configuration"];
+        });
+        context.Services.AddSingleton<IElasticClient>(provider =>
+        {
+            var elasticsearchOptions = configuration.GetSection(ElasticSearchConstants.ElasticsearchOptions)
+                .Get<ElasticSearchOptions>();
+            var settings = new ConnectionSettings(new Uri(elasticsearchOptions.Host));
+            return new ElasticClient(settings);
+        });
+        
         Configure<AbpMultiTenancyOptions>(options =>
         {
             options.IsEnabled = MultiTenancyConsts.IsEnabled;
@@ -99,32 +114,20 @@ public class BankManagementHttpApiHostModule : AbpModule
             options =>
             {
                 options.SwaggerDoc("v1", new OpenApiInfo {Title = "BankManagement API", Version = "v1"});
-                options.DocInclusionPredicate((docName, description) => true);
+                options.DocInclusionPredicate((docName, description) =>
+                    ConfigureSwaggerNotVisibleApis(description));
                 options.CustomSchemaIds(type => type.FullName);
+                
+                var filePathHttpApi = Path.Combine(AppContext.BaseDirectory, "BankManagement.HttpApi.xml");
+                var filePathHttpApiHost = Path.Combine(AppContext.BaseDirectory, "BankManagement.HttpApi.Host.xml");
+                options.IncludeXmlComments(filePathHttpApi, true);
+                options.IncludeXmlComments(filePathHttpApiHost, true);
             });
 
         Configure<AbpLocalizationOptions>(options =>
         {
-            options.Languages.Add(new LanguageInfo("ar", "ar", "العربية"));
-            options.Languages.Add(new LanguageInfo("cs", "cs", "Čeština"));
             options.Languages.Add(new LanguageInfo("en", "en", "English"));
-            options.Languages.Add(new LanguageInfo("en-GB", "en-GB", "English (UK)"));
-            options.Languages.Add(new LanguageInfo("fi", "fi", "Finnish"));
-            options.Languages.Add(new LanguageInfo("fr", "fr", "Français"));
-            options.Languages.Add(new LanguageInfo("hi", "hi", "Hindi"));
-            options.Languages.Add(new LanguageInfo("is", "is", "Icelandic"));
-            options.Languages.Add(new LanguageInfo("it", "it", "Italiano"));
-            options.Languages.Add(new LanguageInfo("hu", "hu", "Magyar"));
-            options.Languages.Add(new LanguageInfo("pt-BR", "pt-BR", "Português"));
-            options.Languages.Add(new LanguageInfo("ro-RO", "ro-RO", "Română"));
-            options.Languages.Add(new LanguageInfo("ru", "ru", "Русский"));
-            options.Languages.Add(new LanguageInfo("sk", "sk", "Slovak"));
             options.Languages.Add(new LanguageInfo("tr", "tr", "Türkçe"));
-            options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "简体中文"));
-            options.Languages.Add(new LanguageInfo("zh-Hant", "zh-Hant", "繁體中文"));
-            options.Languages.Add(new LanguageInfo("de-DE", "de-DE", "Deutsch"));
-            options.Languages.Add(new LanguageInfo("es", "es", "Español"));
-            options.Languages.Add(new LanguageInfo("el", "el", "Ελληνικά"));
         });
 
         context.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -167,6 +170,10 @@ public class BankManagementHttpApiHostModule : AbpModule
         });
     }
 
+    private static bool ConfigureSwaggerNotVisibleApis(ApiDescription apiDescription)
+    {
+        return !apiDescription.RelativePath!.StartsWith("api/abp/");
+    }
     public override void OnApplicationInitialization(ApplicationInitializationContext context)
     {
         var app = context.GetApplicationBuilder();

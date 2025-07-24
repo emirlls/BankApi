@@ -8,6 +8,7 @@
     <RootNamespace>BankManagement</RootNamespace>
     <PreserveCompilationReferences>true</PreserveCompilationReferences>
     <UserSecretsId>BankManagement-c2d31439-b723-48e2-b061-5ebd7aeb6010</UserSecretsId>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

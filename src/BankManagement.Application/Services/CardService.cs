@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using BankManagement.Constants;
 using BankManagement.Dtos.Cards;
 using BankManagement.Entities;
-using BankManagement.Enums;
 using BankManagement.ExceptionCodes;
 using BankManagement.Localization;
 using BankManagement.Managers;
@@ -15,7 +15,7 @@ using Volo.Abp.Application.Services;
 
 namespace BankManagement.Services;
 
-public class CardService:ApplicationService,ICardService
+public class CardService : ApplicationService, ICardService
 {
     private readonly ICardRepository _cardRepository;
     private readonly IAccountRepository _accountRepository;
@@ -23,7 +23,9 @@ public class CardService:ApplicationService,ICardService
     private readonly CardManager _cardManager;
     private readonly IStringLocalizer<BankManagementResource> _stringLocalizer;
 
-    public CardService(ICardRepository cardRepository, IAccountRepository accountRepository, ICustomerRepository customerRepository, IStringLocalizer<BankManagementResource> stringLocalizer, CardManager cardManager)
+    public CardService(ICardRepository cardRepository, IAccountRepository accountRepository,
+        ICustomerRepository customerRepository, IStringLocalizer<BankManagementResource> stringLocalizer,
+        CardManager cardManager)
     {
         _cardRepository = cardRepository;
         _accountRepository = accountRepository;
@@ -32,30 +34,33 @@ public class CardService:ApplicationService,ICardService
         _cardManager = cardManager;
     }
 
-    public async Task<CardCommonDto> CreateAsync(CardCreateDto cardCreateDto, CancellationToken cancellationToken = default)
+    public async Task<CardCommonDto> CreateAsync(CardCreateDto cardCreateDto,
+        CancellationToken cancellationToken = default)
     {
-        var account = await _accountRepository.FindAsync(x => x.Id.Equals(cardCreateDto.AccountId) && x.IsAvailable.Equals(true), cancellationToken: cancellationToken);
+        var account = await _accountRepository.FindAsync(
+            x => x.Id.Equals(cardCreateDto.AccountId) && x.IsAvailable.Equals(true),
+            cancellationToken: cancellationToken);
 
         if (account == null)
         {
             throw new UserFriendlyException(_stringLocalizer[AccountExceptionCodes.NotFound]);
         }
 
-        if (cardCreateDto.CardTypeId == (int)CardTypes.Bank)
+        if (cardCreateDto.CardTypeId == Guid.Parse(LookupSeederConstants.CardTypes.Bank))
         {
             cardCreateDto.CardLimit = 0;
-            
         }
-        var card = _cardManager.Create(account.Id, cardCreateDto.CardNumber, cardCreateDto.Cvv,
-            cardCreateDto.CardTypeId, cardCreateDto.CardLimit,cardCreateDto.IsActive);
+
+        var card = _cardManager.Create(account.Id, cardCreateDto.CardTypeId,cardCreateDto.CardNumber, cardCreateDto.Cvv,
+            cardCreateDto.CardLimit, true);
 
         await _cardRepository.InsertAsync(card, cancellationToken: cancellationToken);
 
         return ObjectMapper.Map<Card, CardCommonDto>(card);
-        
     }
 
-    public async Task<CardCommonDto> UpdateAsync(Guid id, CardUpdateDto cardUpdateDto, CancellationToken cancellationToken = default)
+    public async Task<CardCommonDto> UpdateAsync(Guid id, CardUpdateDto cardUpdateDto,
+        CancellationToken cancellationToken = default)
     {
         var card = await _cardRepository.FindAsync(x => x.Id.Equals(id), cancellationToken: cancellationToken);
         if (card == null)
@@ -63,15 +68,15 @@ public class CardService:ApplicationService,ICardService
             throw new UserFriendlyException(_stringLocalizer[CardExceptionCodes.NotFound]);
         }
 
-        if (card.CardTypeId == (int)CardTypes.Bank)
+        if (card.CardTypeId == Guid.Parse(LookupSeederConstants.CardTypes.Bank))
         {
             cardUpdateDto.CardLimit = 0;
         }
+
         _cardManager.Update(card, cardUpdateDto.IsActive);
 
         await _cardRepository.UpdateAsync(card, cancellationToken: cancellationToken);
         return ObjectMapper.Map<Card, CardCommonDto>(card);
-        
     }
 
     public async Task<bool> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
@@ -93,9 +98,8 @@ public class CardService:ApplicationService,ICardService
         {
             throw new UserFriendlyException(_stringLocalizer[CardExceptionCodes.NotFound]);
         }
-        
+
         return ObjectMapper.Map<Card, CardCommonDto>(card);
-        
     }
 
     public async Task<List<CardCommonDto>> GetListAsync(CancellationToken cancellationToken = default)

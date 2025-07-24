@@ -1,6 +1,4 @@
 using BankManagement.Dtos;
-using BankManagement.Dtos.Transactions;
-using BankManagement.ExceptionCodes;
 using BankManagement.Localization;
 using FluentValidation;
 using Microsoft.Extensions.Localization;

@@ -1,5 +1,6 @@
 ﻿using BankManagement.Entities;
 using BankManagement.Entities.LookUps;
+using BankManagement.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.Data;
@@ -33,11 +34,12 @@ public class BankManagementDbContext : AbpDbContext<BankManagementDbContext>, IB
     
     public DbSet<AccountType> AccountTypes { get; set; }
     public DbSet<CardType> CardTypes { get; set; }
+    public DbSet<TransactionType> TransactionTypes { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
-
+        builder.LookupSeeder();
         builder.ApplyConfigurationsFromAssembly(typeof(BankManagementDbContext).
             Assembly);
         

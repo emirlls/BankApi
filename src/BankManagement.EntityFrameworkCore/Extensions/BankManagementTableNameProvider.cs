@@ -16,7 +16,7 @@ public static class BankManagementTableNameProvider
             nameof(Transaction) => "Transactions",
             nameof(AccountType) => "AccountTypes",
             nameof(CardType) => "CardTypes",
-            
+            nameof(TransactionType) => "TransactionTypes",
             _ => throw new NotImplementedException()
         };
 }

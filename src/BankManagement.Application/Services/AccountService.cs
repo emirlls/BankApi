@@ -2,11 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using BankManagement.Dtos;
 using BankManagement.Dtos.Accounts;
 using BankManagement.Entities;
 using BankManagement.ExceptionCodes;
-using BankManagement.Interfaces;
 using BankManagement.Localization;
 using BankManagement.Managers;
 using BankManagement.Repositories;
@@ -22,7 +20,11 @@ public class AccountService:ApplicationService,IAccountService
     private readonly AccountManager _accountManager;
     private readonly ICustomerRepository _customerRepository;
     private IStringLocalizer<BankManagementResource> _stringLocalizer;
-    public AccountService(IAccountRepository accountRepository, AccountManager accountManager, ICustomerRepository customerRepository, IStringLocalizer<BankManagementResource> stringLocalizer)
+    public AccountService(IAccountRepository accountRepository, 
+        AccountManager accountManager, 
+        ICustomerRepository customerRepository, 
+        IStringLocalizer<BankManagementResource> stringLocalizer
+    )
     {
         _accountRepository = accountRepository;
         _accountManager = accountManager;
@@ -30,7 +32,7 @@ public class AccountService:ApplicationService,IAccountService
         _stringLocalizer = stringLocalizer;
     }
 
-    public async Task<AccountDto> CreateAsync(
+    public async Task<bool> CreateAsync(
         AccountCreateDto accountCreateDto, 
         CancellationToken cancellationToken = default
     )
@@ -49,16 +51,16 @@ public class AccountService:ApplicationService,IAccountService
         
         var account = _accountManager.Create(
             accountCreateDto.CustomerId, 
-            accountCreateDto.Iban,
             accountCreateDto.AccountTypeId, 
+            accountCreateDto.Iban,
             accountCreateDto.Balance, 
             accountCreateDto.IsAvailable);
 
         await _accountRepository.InsertAsync(account, true,cancellationToken: cancellationToken);
-        return ObjectMapper.Map<Account, AccountDto>(account);
+        return true;
     }
 
-    public async Task<AccountDto> UpdateAsync(Guid id,AccountUpdateDto accountUpdateDto, CancellationToken cancellationToken = default)
+    public async Task<bool> UpdateAsync(Guid id,AccountUpdateDto accountUpdateDto, CancellationToken cancellationToken = default)
     {
         var account = await _accountRepository.FindAsync(x => x.Id.Equals(id), cancellationToken: cancellationToken);
         if (account == null)
@@ -66,11 +68,11 @@ public class AccountService:ApplicationService,IAccountService
             throw new UserFriendlyException(_stringLocalizer[AccountExceptionCodes.NotFound]);
         }
 
-        _accountManager.Update(account, accountUpdateDto.Iban, accountUpdateDto.AccountTypeId,
+        _accountManager.Update(account,accountUpdateDto.AccountTypeId, accountUpdateDto.Iban,
             accountUpdateDto.IsAvailable, accountUpdateDto.Balance);
         await _accountRepository.UpdateAsync(account, cancellationToken: cancellationToken);
 
-        return ObjectMapper.Map<Account, AccountDto>(account);
+        return true;
     }
 
     public async Task<bool> DeleteAsync(Guid id,CancellationToken cancellationToken = default)

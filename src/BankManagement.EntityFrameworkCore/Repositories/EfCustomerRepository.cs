@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using BankManagement.Entities;
 using BankManagement.EntityFrameworkCore;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;

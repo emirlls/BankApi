@@ -1,6 +1,5 @@
 using System;
 using BankManagement.Entities;
-using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Domain.Services;
 
 namespace BankManagement.Managers;
@@ -13,14 +12,14 @@ public class CardManager:DomainService
 
     public Card Create(
         Guid accountId, 
+        Guid cardTypeId,
         string cardNumber, 
         string cvv, 
-        int cardTypeId,
         float cardLimit,
         bool isActive
     )
     {
-        return new Card(GuidGenerator.Create())
+        return new Card(GuidGenerator.Create(),CurrentTenant.Id,DateTime.Now)
         {
             AccountId = accountId,
             CardNumber = cardNumber,

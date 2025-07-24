@@ -1,15 +1,13 @@
 using System;
 using System.Collections.Generic;
-using System.Security.Principal;
-using BankManagement.Interfaces;
 using Volo.Abp.Domain.Entities.Auditing;
 using Volo.Abp.MultiTenancy;
-using Volo.Abp.Users;
 
 namespace BankManagement.Entities;
 
-public class Customer:FullAuditedEntity<Guid>
+public class Customer:FullAuditedEntity<Guid>, IMultiTenant
 {
+    public Guid? TenantId { get; }
     public string IdentityNumber { get; set; }
     public string Name{ get; set; }
     public string Surname { get; set; }
@@ -22,8 +20,10 @@ public class Customer:FullAuditedEntity<Guid>
     {
         
     }
-    public Customer(Guid id)
+    public Customer(Guid id,Guid? tenantId, DateTime creationTime)
     {
         Id = id;
+        TenantId = tenantId;
+        CreationTime = creationTime;
     }
 }

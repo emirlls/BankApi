@@ -15,7 +15,7 @@ using Volo.Abp.Application.Services;
 
 namespace BankManagement.Services;
 
-public class TransactionService:ApplicationService,ITransactionService
+public class TransactionService : ApplicationService, ITransactionService
 {
     private readonly IAccountRepository _accountRepository;
     private readonly ICardRepository _cardRepository;
@@ -23,7 +23,9 @@ public class TransactionService:ApplicationService,ITransactionService
     private readonly TransactionManager _transactionManager;
     private readonly IStringLocalizer<BankManagementResource> _stringLocalizer;
 
-    public TransactionService(IAccountRepository accountRepository, ICardRepository cardRepository, ITransactionRepository transactionRepository, IStringLocalizer<BankManagementResource> stringLocalizer, TransactionManager transactionManager)
+    public TransactionService(IAccountRepository accountRepository, ICardRepository cardRepository,
+        ITransactionRepository transactionRepository, IStringLocalizer<BankManagementResource> stringLocalizer,
+        TransactionManager transactionManager)
     {
         _accountRepository = accountRepository;
         _cardRepository = cardRepository;
@@ -36,33 +38,26 @@ public class TransactionService:ApplicationService,ITransactionService
         CancellationToken cancellationToken = default)
     {
         var transaction = _transactionManager.Create(
-            transactionCreateDto.SenderIban, 
+            transactionCreateDto.TransactionTypeId,
+            transactionCreateDto.SenderIban,
             transactionCreateDto.RecevierIban,
-            transactionCreateDto.Balance, 
-            transactionCreateDto.TransactionTypeId
+            transactionCreateDto.Balance
         );
 
         await _transactionRepository.InsertAsync(transaction, cancellationToken: cancellationToken);
         return ObjectMapper.Map<Transaction, TransactionDto>(transaction);
     }
-    
+
     public async Task<List<TransactionDto>> GetListAsync(CancellationToken cancellationToken = default)
     {
         var transactions = await _transactionRepository.GetListAsync(true, cancellationToken);
         return ObjectMapper.Map<List<Transaction>, List<TransactionDto>>(transactions);
-        
-        /*return (await _transactionRepository.GetListAsync(true, cancellationToken)).Select(x => new TransactionDto()
-        {
-            SenderIban = x.SenderIban,
-            RecevierIban = x.ReceiverIban,
-            Balance = x.Balance,
-            TransactionTypeId = x.TransactionTypeId
-        }).ToList();*/
     }
 
     public async Task<TransactionDto> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        var transaction = await _transactionRepository.GetAsync(x => x.Id.Equals(id), cancellationToken: cancellationToken);
+        var transaction =
+            await _transactionRepository.GetAsync(x => x.Id.Equals(id), cancellationToken: cancellationToken);
 
         if (transaction == null)
         {

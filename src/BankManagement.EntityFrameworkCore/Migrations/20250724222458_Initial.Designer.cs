@@ -13,8 +13,8 @@ using Volo.Abp.EntityFrameworkCore;
 namespace BankManagement.Migrations
 {
     [DbContext(typeof(BankManagementDbContext))]
-    [Migration("20241019203313_CreatedTransactionTypesTable")]
-    partial class CreatedTransactionTypesTable
+    [Migration("20250724222458_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -32,8 +32,8 @@ namespace BankManagement.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid");
 
-                    b.Property<int>("AccountTypeId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("AccountTypeId")
+                        .HasColumnType("uuid");
 
                     b.Property<float>("Balance")
                         .HasColumnType("real");
@@ -78,6 +78,10 @@ namespace BankManagement.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("LastModifierId");
 
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("TenantId");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AccountTypeId");
@@ -105,8 +109,8 @@ namespace BankManagement.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("CardTypeId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("CardTypeId")
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("timestamp without time zone")
@@ -129,9 +133,7 @@ namespace BankManagement.Migrations
                         .HasColumnName("DeletionTime");
 
                     b.Property<bool>("IsActive")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(true);
+                        .HasColumnType("boolean");
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
@@ -146,6 +148,10 @@ namespace BankManagement.Migrations
                     b.Property<Guid?>("LastModifierId")
                         .HasColumnType("uuid")
                         .HasColumnName("LastModifierId");
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("TenantId");
 
                     b.HasKey("Id");
 
@@ -214,6 +220,10 @@ namespace BankManagement.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("TenantId");
+
                     b.HasKey("Id");
 
                     b.ToTable("Customers", "BankManagement");
@@ -221,11 +231,11 @@ namespace BankManagement.Migrations
 
             modelBuilder.Entity("BankManagement.Entities.LookUps.AccountType", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    b.Property<int>("Code")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("timestamp without time zone")
@@ -241,19 +251,41 @@ namespace BankManagement.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("TenantId");
 
                     b.HasKey("Id");
 
                     b.ToTable("AccountTypes", "BankManagement");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("3018286c-3eb3-4710-a2ea-a82948c80596"),
+                            Code = 1,
+                            CreationTime = new DateTime(2025, 7, 25, 1, 24, 57, 725, DateTimeKind.Local).AddTicks(192),
+                            IsActive = false,
+                            Name = "Deposite"
+                        },
+                        new
+                        {
+                            Id = new Guid("d2333569-8720-4f19-97b3-ef8d7d1f19d1"),
+                            Code = 2,
+                            CreationTime = new DateTime(2025, 7, 25, 1, 24, 57, 725, DateTimeKind.Local).AddTicks(337),
+                            IsActive = false,
+                            Name = "Checking"
+                        });
                 });
 
             modelBuilder.Entity("BankManagement.Entities.LookUps.CardType", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    b.Property<int>("Code")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("timestamp without time zone")
@@ -269,19 +301,41 @@ namespace BankManagement.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("TenantId");
 
                     b.HasKey("Id");
 
                     b.ToTable("CardTypes", "BankManagement");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("42f63785-93f9-4b53-9038-9499455d9cd5"),
+                            Code = 1,
+                            CreationTime = new DateTime(2025, 7, 25, 1, 24, 57, 725, DateTimeKind.Local).AddTicks(604),
+                            IsActive = false,
+                            Name = "Bank"
+                        },
+                        new
+                        {
+                            Id = new Guid("ea9295a9-610d-41b1-8c95-8766b8ec4055"),
+                            Code = 2,
+                            CreationTime = new DateTime(2025, 7, 25, 1, 24, 57, 725, DateTimeKind.Local).AddTicks(609),
+                            IsActive = false,
+                            Name = "Credit"
+                        });
                 });
 
             modelBuilder.Entity("BankManagement.Entities.LookUps.TransactionType", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    b.Property<int>("Code")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("timestamp without time zone")
@@ -298,9 +352,47 @@ namespace BankManagement.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("TenantId");
+
                     b.HasKey("Id");
 
-                    b.ToTable("TransactionType");
+                    b.ToTable("TransactionTypes", "BankManagement");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("6707cd60-afa6-4be8-ad69-53436ae92aa3"),
+                            Code = 1,
+                            CreationTime = new DateTime(2025, 7, 25, 1, 24, 57, 725, DateTimeKind.Local).AddTicks(632),
+                            IsActive = false,
+                            Name = "AccountToAccount"
+                        },
+                        new
+                        {
+                            Id = new Guid("586dee74-6c05-4f4f-bd00-51724d0fe571"),
+                            Code = 2,
+                            CreationTime = new DateTime(2025, 7, 25, 1, 24, 57, 725, DateTimeKind.Local).AddTicks(636),
+                            IsActive = false,
+                            Name = "AccountToCard"
+                        },
+                        new
+                        {
+                            Id = new Guid("773ce647-3ec2-4e6e-9eec-3ba8fce2c33a"),
+                            Code = 3,
+                            CreationTime = new DateTime(2025, 7, 25, 1, 24, 57, 725, DateTimeKind.Local).AddTicks(638),
+                            IsActive = false,
+                            Name = "CardToAccount"
+                        },
+                        new
+                        {
+                            Id = new Guid("6c31cd15-a33f-4564-956f-5d87d0c6a4fe"),
+                            Code = 4,
+                            CreationTime = new DateTime(2025, 7, 25, 1, 24, 57, 725, DateTimeKind.Local).AddTicks(639),
+                            IsActive = false,
+                            Name = "CardToCard"
+                        });
                 });
 
             modelBuilder.Entity("BankManagement.Entities.Transaction", b =>
@@ -352,14 +444,23 @@ namespace BankManagement.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("TransactionTypeId")
-                        .HasColumnType("integer");
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("TenantId");
+
+                    b.Property<Guid>("TransactionTypeId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("TransactionTypeId1")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AccountId");
 
                     b.HasIndex("TransactionTypeId");
+
+                    b.HasIndex("TransactionTypeId1");
 
                     b.ToTable("Transactions", "BankManagement");
                 });
@@ -2155,6 +2256,10 @@ namespace BankManagement.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("BankManagement.Entities.LookUps.TransactionType", null)
+                        .WithMany("Transactions")
+                        .HasForeignKey("TransactionTypeId1");
+
                     b.Navigation("TransactionType");
                 });
 
@@ -2320,6 +2425,11 @@ namespace BankManagement.Migrations
             modelBuilder.Entity("BankManagement.Entities.LookUps.CardType", b =>
                 {
                     b.Navigation("Cards");
+                });
+
+            modelBuilder.Entity("BankManagement.Entities.LookUps.TransactionType", b =>
+                {
+                    b.Navigation("Transactions");
                 });
 
             modelBuilder.Entity("Volo.Abp.AuditLogging.AuditLog", b =>
