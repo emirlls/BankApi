@@ -41,25 +41,15 @@ public static class LookupSeeders
         
         #region TransactionTypes
         builder.Entity<TransactionType>().HasData(
-            new TransactionType(Guid.Parse(LookupSeederConstants.TransactionTypes.AccountToAccount),null,DateTime.Now)
+            new TransactionType(Guid.Parse(LookupSeederConstants.TransactionTypes.ToAccount),null,DateTime.Now)
             {
                 Code = 1,
-                Name = "AccountToAccount"
+                Name = "ToAccount"
             },
-            new TransactionType(Guid.Parse(LookupSeederConstants.TransactionTypes.AccountToCard),null,DateTime.Now)
+            new TransactionType(Guid.Parse(LookupSeederConstants.TransactionTypes.ToCard),null,DateTime.Now)
             {
                 Code = 2,
-                Name = "AccountToCard"
-            },
-            new TransactionType(Guid.Parse(LookupSeederConstants.TransactionTypes.CardToAccount),null,DateTime.Now)
-            {
-                Code = 3,
-                Name = "CardToAccount"
-            },
-            new TransactionType(Guid.Parse(LookupSeederConstants.TransactionTypes.CardToCard),null,DateTime.Now)
-            {
-                Code = 4,
-                Name = "CardToCard"
+                Name = "ToCard"
             }
         );
         #endregion
