@@ -56,7 +56,7 @@ public class TransactionController:AbpControllerBase
     /// <returns></returns>
     [HttpPost]
     [CacheClear<TransactionDto>(CacheModelConstants.TransactionCacheModel)]
-    public async Task<TransactionDto> CreateAsync(TransactionCreateDto transactionCreateDto,
+    public async Task<bool> CreateAsync(TransactionCreateDto transactionCreateDto,
         CancellationToken cancellationToken = default)
     {
         return await _transactionService.CreateAsync(transactionCreateDto, cancellationToken);

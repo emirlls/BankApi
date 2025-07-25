@@ -33,7 +33,7 @@ public class CardService : ApplicationService, ICardService
         _stringLocalizer = stringLocalizer;
         _cardManager = cardManager;
     }
-
+    // todo: Use elastic on get methods.
     public async Task<CardCommonDto> CreateAsync(CardCreateDto cardCreateDto,
         CancellationToken cancellationToken = default)
     {
