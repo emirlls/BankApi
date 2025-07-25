@@ -14,6 +14,11 @@ public interface ITransactionService:IApplicationService
 
     Task<TransactionDto> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
 
-    Task<TransactionDto> CreateAsync(TransactionCreateDto transactionCreateDto,
+    Task<bool> CreateAsync(TransactionCreateDto transactionCreateDto,
         CancellationToken cancellationToken = default);
+
+    Task<bool> UpdateAsync(Guid id, TransactionUpdateDto transactionUpdateDto,
+        CancellationToken cancellationToken = default);
+
+    Task<bool> DeleteAsync(Guid id, CancellationToken cancellationToken = default);
 }

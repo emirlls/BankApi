@@ -17,7 +17,7 @@ public class AccountConfiguration:IEntityTypeConfiguration<Account>
         builder.HasOne(x => x.Customer)
             .WithMany(x=>x.Accounts)
             .HasForeignKey(x => x.CustomerId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.Cascade);
         
         builder.HasOne(x => x.AccountTypes)
             .WithMany(x=>x.Accounts)

@@ -1,4 +1,4 @@
-namespace BankManagement.Models.ElasticSearchModel;
+namespace BankManagement.Models.ElasticSearchs;
 
 public class ElasticSearchOptions
 {

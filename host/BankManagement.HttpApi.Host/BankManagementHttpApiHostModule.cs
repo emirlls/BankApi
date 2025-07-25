@@ -11,7 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using BankManagement.EntityFrameworkCore;
 using BankManagement.Extensions;
-using BankManagement.Models.ElasticSearchModel;
+using BankManagement.Models.ElasticSearchs;
 using BankManagement.MultiTenancy;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Caching.StackExchangeRedis;

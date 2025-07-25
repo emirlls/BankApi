@@ -1,11 +1,7 @@
-using System;
+using BankManagement.Dtos.Transactions;
 
 namespace BankManagement.Dtos;
 
-public class TransactionCreateDto
+public class TransactionCreateDto : TransactionBaseDto
 {
-    public Guid TransactionTypeId { get; set; }
-    public string SenderIban { get; set; }
-    public string RecevierIban { get; set; }
-    public float Balance { get; set; }
 }

@@ -4,6 +4,8 @@
     "MyAccount":  "My account",
     "SamplePageMessage": "A sample page for the BankManagement module",
 
+    "BankManagement.Exceptions:00001": "{0} entity not found",
+    
     "BankManagement.Customer:00001": "Customer not found",
     "BankManagement.Customer:00002": "Customer already exists",
 
@@ -21,8 +23,7 @@
     "BankManagement.Account:00002": "Account already exists",
     "BankManagement.Account.Iban:00001": "Iban field cannot be empty",
     "BankManagement.Account.Iban:00002": "Iban is already exists",
-
-
+    
     "BankManagement.Card:00001": "Card not found",
     "BankManagement.Card:00002": "Card already exists",
 
@@ -45,6 +46,9 @@
     "BankManagement.Enums.TransactionTypes.TRA:01": "Account to account",
     "BankManagement.Enums.TransactionTypes.TRA:02": "Account to card",
     "BankManagement.Enums.TransactionTypes.TRA:03": "Card to account",
-    "BankManagement.Enums.TransactionTypes.TRA:04": "Card to card"
+    "BankManagement.Enums.TransactionTypes.TRA:04": "Card to card",
+
+    //Dashboard Labels
+    "DashboardLabels:01" : "Daily Transaction Count"
   }
 }
