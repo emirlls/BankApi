@@ -3,6 +3,8 @@
   "texts": {
     "MyAccount":  "Hesabım",
     "SamplePageMessage": "BankManagement modulünden örnek bir sayfa",
+
+    "BankManagement.Exceptions:00001": "{0} entity bulunamadı.",
     
     "BankManagement.Customer:00001": "Müşteri bulunamadı",
     "BankManagement.Customer:00002": "Müşteri zaten var",
@@ -42,6 +44,9 @@
     "BankManagement.Enums.TransactionTypes.TRA:01": "Hesaptan hesaba",
     "BankManagement.Enums.TransactionTypes.TRA:02": "Hesaptan karta",
     "BankManagement.Enums.TransactionTypes.TRA:03": "Karttan hesaba",
-    "BankManagement.Enums.TransactionTypes.TRA:04": "Karttan karta"
+    "BankManagement.Enums.TransactionTypes.TRA:04": "Karttan karta",
+    
+    //Dashboard Labels
+    "DashboardLabels:01" : "Günlük Transfer Sayısı"
   }
 }

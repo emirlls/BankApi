@@ -32,6 +32,7 @@ public class AccountService:ApplicationService,IAccountService
         _stringLocalizer = stringLocalizer;
     }
 
+    // todo: Use elastic on get methods.
     public async Task<bool> CreateAsync(
         AccountCreateDto accountCreateDto, 
         CancellationToken cancellationToken = default

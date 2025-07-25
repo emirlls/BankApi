@@ -1,26 +1,21 @@
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using BankManagement.Constants;
 using BankManagement.Entities;
-using BankManagement.Models.ElasticSearchModel;
+using BankManagement.Extensions;
+using BankManagement.Models.ElasticSearchs;
 using BankManagement.Repositories;
-using Nest;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace BankManagement.BackgroundJobs;
 
 public class TransactionBackgroundJob : BankManagementAppService
 {
-    private readonly ITransactionRepository _transactionRepository;
-    private readonly ElasticClient _elasticClient;
+    private readonly IServiceProvider _serviceProvider;
 
-    public TransactionBackgroundJob(
-        ITransactionRepository transactionRepository,
-        ElasticClient elasticClient
-    )
+    public TransactionBackgroundJob(IServiceProvider serviceProvider)
     {
-        _transactionRepository = transactionRepository;
-        _elasticClient = elasticClient;
+        _serviceProvider = serviceProvider;
     }
 
 
@@ -28,17 +23,9 @@ public class TransactionBackgroundJob : BankManagementAppService
     {
         try
         {
-            var oldTransactions = await _transactionRepository
-                .GetListAsync(x => x.CreationTime < DateTime.Today.Date);
-            var transactionElasticModel =
-                ObjectMapper.Map<List<Transaction>, List<TransactionElasticModel>>(oldTransactions);
-            await _elasticClient.DeleteByQueryAsync<TransactionElasticModel>(q =>
-                q.Index(ElasticSearchConstants.Transaction.TransactionIndex)
-                    .Query(q => q.MatchAll())
-            );
-            await _elasticClient.IndexManyAsync(transactionElasticModel,
+            var transactionRepository = _serviceProvider.GetRequiredService<ITransactionRepository>();
+            await _serviceProvider.LogModelsToElasticAsync<Transaction, TransactionElasticModel>(transactionRepository,
                 ElasticSearchConstants.Transaction.TransactionIndex);
-            await _transactionRepository.DeleteManyAsync(oldTransactions);
         }
         catch (Exception e)
         {

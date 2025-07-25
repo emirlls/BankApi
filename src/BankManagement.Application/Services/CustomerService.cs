@@ -25,7 +25,7 @@ public class CustomerService:ApplicationService,ICustomerService
         _customerManager = customerManager;
         _stringLocalizer = stringLocalizer;
     }
-
+    // todo: Use elastic on get methods.
     public async Task<CustomerDto> CreateAsync(CustomerDto customerDto, CancellationToken cancellationToken = default)
     {
         var alreadyExists = await _customerRepository.FindAsync(

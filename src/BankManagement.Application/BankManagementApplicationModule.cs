@@ -2,6 +2,7 @@
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Modularity;
 using Volo.Abp.Application;
+using Volo.Abp.EventBus.RabbitMq;
 
 namespace BankManagement;
 
@@ -9,7 +10,8 @@ namespace BankManagement;
     typeof(BankManagementDomainModule),
     typeof(BankManagementApplicationContractsModule),
     typeof(AbpDddApplicationModule),
-    typeof(AbpAutoMapperModule)
+    typeof(AbpAutoMapperModule),
+    typeof(AbpEventBusRabbitMqModule)
     )]
 public class BankManagementApplicationModule : AbpModule
 {

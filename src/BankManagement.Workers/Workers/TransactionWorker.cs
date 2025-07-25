@@ -7,6 +7,9 @@ using Volo.Abp.Threading;
 
 namespace BankManagement.Workers.Workers;
 
+/// <summary>
+/// Worker used to periodically transfer transaction data from the database to elastic
+/// </summary>
 public class TransactionWorker : AsyncPeriodicBackgroundWorkerBase
 {
     private readonly IConfiguration _configuration;
@@ -26,7 +29,7 @@ public class TransactionWorker : AsyncPeriodicBackgroundWorkerBase
             return;
         }
 
-        var transactionJob = workerContext.ServiceProvider.GetRequiredService<TransactionBackgroundJob>();
-        await transactionJob.LogTransactionToElasticAsync();
+        var transactionBackgroundJob = workerContext.ServiceProvider.GetRequiredService<TransactionBackgroundJob>();
+        await transactionBackgroundJob.LogTransactionToElasticAsync();
     }
 }
