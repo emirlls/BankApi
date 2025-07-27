@@ -14,6 +14,7 @@ using BankManagement.Extensions;
 using BankManagement.Models.ElasticSearchs;
 using BankManagement.MultiTenancy;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 //using StackExchange.Redis;
 using Microsoft.OpenApi.Models;
@@ -55,6 +56,7 @@ namespace BankManagement;
     typeof(AbpAspNetCoreSerilogModule),
     typeof(AbpSwashbuckleModule)
     )]
+
 public class BankManagementHttpApiHostModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)
@@ -72,8 +74,12 @@ public class BankManagementHttpApiHostModule : AbpModule
 
         Configure<AbpDbContextOptions>(options =>
         {
-            options.UseNpgsql();
+            options.UseNpgsql(opts =>
+            {
+                opts.UseNetTopologySuite();
+            });
         });
+
 
         Configure<RedisCacheOptions>(options =>
         {

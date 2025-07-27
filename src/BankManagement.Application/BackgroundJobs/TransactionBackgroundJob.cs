@@ -25,7 +25,7 @@ public class TransactionBackgroundJob : BankManagementAppService
         {
             var transactionRepository = _serviceProvider.GetRequiredService<ITransactionRepository>();
             await _serviceProvider.LogModelsToElasticAsync<Transaction, TransactionElasticModel>(transactionRepository,
-                ElasticSearchConstants.Transaction.TransactionIndex);
+                ElasticSearchConstants.Transaction.TransactionIndex, true);
         }
         catch (Exception e)
         {

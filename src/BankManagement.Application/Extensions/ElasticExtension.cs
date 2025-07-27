@@ -17,12 +17,14 @@ public static class ElasticExtension
     /// <param name="serviceProvider"></param>
     /// <param name="repository"></param>
     /// <param name="indexName"></param>
+    /// <param name="clearDatabase"></param>
     /// <typeparam name="TEntity"></typeparam>
     /// <typeparam name="TModel"></typeparam>
     public static async Task LogModelsToElasticAsync<TEntity, TModel>(
         this IServiceProvider serviceProvider,
         Volo.Abp.Domain.Repositories.IRepository<TEntity> repository,
-        string indexName
+        string indexName,
+        bool clearDatabase = false
     )
         where TEntity : class, IEntity
         where TModel : class
@@ -34,8 +36,10 @@ public static class ElasticExtension
 
         await elasticClient.IndexManyAsync(elasticModel,
             indexName);
-        
-        await repository.DeleteManyAsync(entities);
+        if (clearDatabase)
+        {
+            await repository.DeleteManyAsync(entities);
+        }
     }
     
     /// <summary>

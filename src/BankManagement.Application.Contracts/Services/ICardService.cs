@@ -9,9 +9,9 @@ namespace BankManagement.Services;
 
 public interface ICardService:IApplicationService
 {
-    public Task<CardCommonDto> CreateAsync(CardCreateDto cardCreateDto, CancellationToken cancellationToken = default);
+    public Task<bool> CreateAsync(CardCreateDto cardCreateDto, CancellationToken cancellationToken = default);
 
-    public Task<CardCommonDto> UpdateAsync(Guid id, CardUpdateDto cardUpdateDto,
+    public Task<bool> UpdateAsync(Guid id, CardUpdateDto cardUpdateDto,
         CancellationToken cancellationToken = default);
 
     public Task<bool> DeleteAsync(Guid id, CancellationToken cancellationToken = default);

@@ -1,48 +1,51 @@
 using System;
 using BankManagement.Entities;
-using Volo.Abp.Domain.Services;
+using BankManagement.ExceptionCodes;
+using BankManagement.Localization;
+using BankManagement.Models.Accounts;
+using BankManagement.Repositories;
+using Microsoft.Extensions.Localization;
 
 namespace BankManagement.Managers;
 
-public class AccountManager : DomainService
+public class AccountManager : ExtendedManager<Account, IAccountRepository>
 {
-
-    public AccountManager()
+    public AccountManager(
+        IAccountRepository repository,
+        IStringLocalizer<BankManagementResource> stringLocalizer
+        ) : base(
+        repository,
+        stringLocalizer,
+        AccountExceptionCodes.NotFound
+        )
     {
     }
 
     public Account Create(
-        Guid customerId, 
-        Guid accountTypeId, 
-        string iban, 
-        float balance, 
-        bool isAvailable
-        )
-    {
-        return new Account(GuidGenerator.Create(),CurrentTenant.Id,DateTime.Now)
-        {
-            CustomerId = customerId,
-            Iban = iban,
-            AccountTypeId = accountTypeId,
-            Balance = balance,
-            IsAvailable = isAvailable
-        };
-    }
-    
-    
-    public Account Update(
-        Account account,
-        Guid accountTypeId,
-        string iban,
-        bool isAvailable,
-        float balance
+        AccountCreateModel accountCreateModel
     )
     {
-        account.Iban = iban;
-        account.AccountTypeId = accountTypeId;
-        account.IsAvailable = isAvailable;
-        account.Balance = balance;
-        return account;
+        return new Account(GuidGenerator.Create(), CurrentTenant.Id, DateTime.Now)
+        {
+            CustomerId = accountCreateModel.CustomerId,
+            Iban = accountCreateModel.Iban,
+            AccountTypeId = accountCreateModel.AccountTypeId,
+            Balance = accountCreateModel.Balance,
+            IsAvailable = accountCreateModel.IsAvailable
+        };
     }
 
+
+    public Account Update(
+        Account account,
+        AccountUpdateModel accountUpdateModel
+    )
+    {
+        account.CustomerId = accountUpdateModel.CustomerId;
+        account.Iban = accountUpdateModel.Iban;
+        account.AccountTypeId = accountUpdateModel.AccountTypeId;
+        account.IsAvailable = accountUpdateModel.IsAvailable;
+        account.Balance = accountUpdateModel.Balance;
+        return account;
+    }
 }

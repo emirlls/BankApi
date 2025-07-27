@@ -1,7 +1,6 @@
 using System;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using BankManagement.ExceptionCodes;
 using BankManagement.Localization;
 using Microsoft.Extensions.Localization;
 using Volo.Abp;
@@ -17,9 +16,11 @@ where TRepository: IRepository<TEntity>
 {
     private readonly TRepository _repository;
     private readonly IStringLocalizer<BankManagementResource> _stringLocalizer;
-    protected ExtendedManager(TRepository repository,IStringLocalizer<BankManagementResource> stringLocalizer)
+    private readonly string _notFoundExceptionMessage;
+    protected ExtendedManager(TRepository repository,IStringLocalizer<BankManagementResource> stringLocalizer, string notFoundExceptinMessage)
     {
         _stringLocalizer = stringLocalizer;
+        _notFoundExceptionMessage = notFoundExceptinMessage;
         _repository = repository;
     }
 
@@ -29,8 +30,7 @@ where TRepository: IRepository<TEntity>
         if (response == null && throwIfNotExists)
         {
             var message = string.Format(
-                _stringLocalizer[BankManagementExceptionCodes.NotFound],
-                nameof(TEntity));
+                _stringLocalizer[_notFoundExceptionMessage]);
             throw new UserFriendlyException(message);
         }
         return response;

@@ -4,12 +4,8 @@ namespace BankManagement.Enums;
 
 public enum TransactionTypes
 {
-    [Description("TransactionTypes.TRA:01")]   //Hesaptan hesaba
-    AccountToAccount = 1,
-    [Description("TransactionTypes.TRA:02")]   //Hesaptan karta
-    AccountToCard = 2,
-    [Description("TransactionTypes.TRA:03")]   //Karttan hesaba
-    CardToAccount = 3,
-    [Description("TransactionTypes.TRA:04")]   //Karttan karta
-    CardToCard = 4,
+    [Description("TransactionTypes:01")]   //To Account
+    ToAccount = 1,
+    [Description("TransactionTypes:02")]   //To Card
+    ToCard = 2,
 }

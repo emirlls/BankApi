@@ -7,6 +7,7 @@ using BankManagement.Entities;
 using BankManagement.ExceptionCodes;
 using BankManagement.Localization;
 using BankManagement.Managers;
+using BankManagement.Models.Accounts;
 using BankManagement.Repositories;
 using Microsoft.Extensions.Localization;
 using Volo.Abp;
@@ -14,98 +15,75 @@ using Volo.Abp.Application.Services;
 
 namespace BankManagement.Services;
 
-public class AccountService:ApplicationService,IAccountService
+public class AccountService : ApplicationService, IAccountService
 {
     private readonly IAccountRepository _accountRepository;
     private readonly AccountManager _accountManager;
-    private readonly ICustomerRepository _customerRepository;
     private IStringLocalizer<BankManagementResource> _stringLocalizer;
-    public AccountService(IAccountRepository accountRepository, 
-        AccountManager accountManager, 
-        ICustomerRepository customerRepository, 
-        IStringLocalizer<BankManagementResource> stringLocalizer
-    )
+    private readonly CustomerManager _customerManager;
+
+    public AccountService(IAccountRepository accountRepository,
+        AccountManager accountManager,
+        CustomerManager customerManager,
+        IStringLocalizer<BankManagementResource> stringLocalizer)
     {
         _accountRepository = accountRepository;
         _accountManager = accountManager;
-        _customerRepository = customerRepository;
         _stringLocalizer = stringLocalizer;
+        _customerManager = customerManager;
     }
 
-    // todo: Use elastic on get methods.
     public async Task<bool> CreateAsync(
-        AccountCreateDto accountCreateDto, 
+        AccountCreateDto accountCreateDto,
         CancellationToken cancellationToken = default
     )
     {
-        var customer = await _customerRepository.FindAsync(x => x.Id.Equals(accountCreateDto.CustomerId), cancellationToken: cancellationToken);
-        if (customer == null)
-        {
-            throw new UserFriendlyException(_stringLocalizer[CustomerExceptionCodes.NotFound]);
-        }
-
-        var alreadyExistsIban = await _accountRepository.FindAsync(x => x.Iban.Equals(accountCreateDto.Iban), cancellationToken: cancellationToken);
+        await _customerManager.TryGetByAsync(x => x.Id.Equals(accountCreateDto.CustomerId), true);
+        var alreadyExistsIban = await _accountManager.TryGetByAsync(x => string.Equals(x.Iban, accountCreateDto.Iban));
         if (alreadyExistsIban != null)
         {
             throw new UserFriendlyException(_stringLocalizer[AccountExceptionCodes.Iban.AlreadyExists]);
         }
-        
-        var account = _accountManager.Create(
-            accountCreateDto.CustomerId, 
-            accountCreateDto.AccountTypeId, 
-            accountCreateDto.Iban,
-            accountCreateDto.Balance, 
-            accountCreateDto.IsAvailable);
 
-        await _accountRepository.InsertAsync(account, true,cancellationToken: cancellationToken);
+        var accountCreateModel = ObjectMapper.Map<AccountCreateDto, AccountCreateModel>(accountCreateDto);
+        var account = _accountManager.Create(accountCreateModel);
+
+        await _accountRepository.InsertAsync(account, true, cancellationToken);
         return true;
     }
 
-    public async Task<bool> UpdateAsync(Guid id,AccountUpdateDto accountUpdateDto, CancellationToken cancellationToken = default)
+    public async Task<bool> UpdateAsync(Guid id, AccountUpdateDto accountUpdateDto,
+        CancellationToken cancellationToken = default)
     {
-        var account = await _accountRepository.FindAsync(x => x.Id.Equals(id), cancellationToken: cancellationToken);
-        if (account == null)
-        {
-            throw new UserFriendlyException(_stringLocalizer[AccountExceptionCodes.NotFound]);
-        }
-
-        _accountManager.Update(account,accountUpdateDto.AccountTypeId, accountUpdateDto.Iban,
-            accountUpdateDto.IsAvailable, accountUpdateDto.Balance);
-        await _accountRepository.UpdateAsync(account, cancellationToken: cancellationToken);
-
+        var account = await _accountManager.TryGetByAsync(x => x.Id.Equals(id), true);
+        var accountUpdateModel = ObjectMapper.Map<AccountUpdateDto, AccountUpdateModel>(accountUpdateDto);
+        var updatedAccount = _accountManager.Update(account!, accountUpdateModel);
+        await _accountRepository.UpdateAsync(updatedAccount, cancellationToken: cancellationToken);
         return true;
     }
 
-    public async Task<bool> DeleteAsync(Guid id,CancellationToken cancellationToken = default)
+    public async Task<bool> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        var account = await _accountRepository.FindAsync(x => x.Id.Equals(id), cancellationToken: cancellationToken);
-        if (account == null)
-        {
-            throw new UserFriendlyException(_stringLocalizer[AccountExceptionCodes.NotFound]);
-        }
-
-        await _accountRepository.DeleteAsync(account, cancellationToken: cancellationToken);
+        var account = await _accountManager.TryGetByAsync(x => x.Id.Equals(id), true);
+        await _accountRepository.DeleteAsync(account!, cancellationToken: cancellationToken);
         return true;
     }
 
     public async Task<List<AccountDto>> GetListAsync(CancellationToken cancellationToken)
     {
-        var accounts = await _accountRepository.GetListAsync(x => x.IsAvailable.Equals(true), cancellationToken: cancellationToken);
+        var accounts =
+            await _accountRepository.GetListAsync(x => x.IsAvailable == true,
+                cancellationToken: cancellationToken);
 
-        return ObjectMapper.Map<List<Account>,List<AccountDto>>(accounts);
+        return ObjectMapper.Map<List<Account>, List<AccountDto>>(accounts);
     }
 
     public async Task<AccountDto> GetByIdAsync(
-        Guid id, 
+        Guid id,
         CancellationToken cancellationToken = default
     )
     {
-        var account = await _accountRepository.FindAsync(x => x.Id.Equals(id), cancellationToken: cancellationToken);
-        if (account == null)
-        {
-            throw new UserFriendlyException(_stringLocalizer[AccountExceptionCodes.NotFound]);
-        }
-
+        var account = await _accountManager.TryGetByAsync(x => x.Id.Equals(id), true);
         return ObjectMapper.Map<Account, AccountDto>(account);
     }
 }

@@ -30,24 +30,31 @@
     "BankManagement.Transaction:00001": "Transaction not found",
     "BankManagement.Transaction:00002": "Transaction already exists",
     
+    
+    "BankManagement.Branch:00001": "Branch not found",
+    "BankManagement.BranchMapFeature:00001": "Branch map feature not found",
+    
+    
     //Enums
 
 
     //Account Types
-    "BankManagement.Enums.AccountTypes.ACC:01": "Deposit",
-    "BankManagement.Enums.AccountTypes.ACC:02": "Checking",
+    "BankManagement.Enums.AccountTypes:01": "Deposit",
+    "BankManagement.Enums.AccountTypes:02": "Checking",
 
     //Card Types
 
-    "BankManagement.Enums.CardTypes.CAR:01": "Bank Card",
-    "BankManagement.Enums.CardTypes.CAR:02": "Credit Card",
+    "BankManagement.Enums.CardTypes:01": "Bank Card",
+    "BankManagement.Enums.CardTypes:02": "Credit Card",
     
     //Transaction Types
-    "BankManagement.Enums.TransactionTypes.TRA:01": "Account to account",
-    "BankManagement.Enums.TransactionTypes.TRA:02": "Account to card",
-    "BankManagement.Enums.TransactionTypes.TRA:03": "Card to account",
-    "BankManagement.Enums.TransactionTypes.TRA:04": "Card to card",
+    "BankManagement.Enums.TransactionTypes:01": "To Account",
+    "BankManagement.Enums.TransactionTypes:02": "To Card",
 
+    //Branch Types
+    "BranchTypes:01": "Branch",
+    "BranchTypes:02": "Atm",
+    
     //Dashboard Labels
     "DashboardLabels:01" : "Daily Transaction Count"
   }
