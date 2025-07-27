@@ -4,6 +4,7 @@ using BankManagement.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using NetTopologySuite.Geometries;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Volo.Abp.EntityFrameworkCore;
 
@@ -22,6 +23,7 @@ namespace BankManagement.Migrations
                 .HasAnnotation("ProductVersion", "8.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
+            NpgsqlModelBuilderExtensions.HasPostgresExtension(modelBuilder, "postgis");
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("BankManagement.Entities.Account", b =>
@@ -86,6 +88,107 @@ namespace BankManagement.Migrations
                     b.HasIndex("CustomerId");
 
                     b.ToTable("Accounts", "BankManagement");
+                });
+
+            modelBuilder.Entity("BankManagement.Entities.Branch", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("BranchTypeId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("CreationTime");
+
+                    b.Property<Guid?>("CreatorId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("CreatorId");
+
+                    b.Property<Guid?>("DeleterId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("DeleterId");
+
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("DeletionTime");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false)
+                        .HasColumnName("IsDeleted");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("LastModificationTime");
+
+                    b.Property<Guid?>("LastModifierId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("LastModifierId");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("TenantId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BranchTypeId");
+
+                    b.ToTable("Branches", "BankManagement");
+                });
+
+            modelBuilder.Entity("BankManagement.Entities.BranchMapFeature", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("BranchId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("CreationTime");
+
+                    b.Property<Guid?>("CreatorId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("CreatorId");
+
+                    b.Property<Guid?>("DeleterId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("DeleterId");
+
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("DeletionTime");
+
+                    b.Property<Geometry>("Geom")
+                        .IsRequired()
+                        .HasColumnType("geometry");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false)
+                        .HasColumnName("IsDeleted");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("LastModificationTime");
+
+                    b.Property<Guid?>("LastModifierId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("LastModifierId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BranchId");
+
+                    b.ToTable("BranchMapFeatures", "BankManagement");
                 });
 
             modelBuilder.Entity("BankManagement.Entities.Card", b =>
@@ -262,7 +365,7 @@ namespace BankManagement.Migrations
                         {
                             Id = new Guid("3018286c-3eb3-4710-a2ea-a82948c80596"),
                             Code = 1,
-                            CreationTime = new DateTime(2025, 7, 25, 1, 24, 57, 725, DateTimeKind.Local).AddTicks(192),
+                            CreationTime = new DateTime(2025, 7, 27, 2, 45, 7, 810, DateTimeKind.Local).AddTicks(3947),
                             IsActive = false,
                             Name = "Deposite"
                         },
@@ -270,9 +373,59 @@ namespace BankManagement.Migrations
                         {
                             Id = new Guid("d2333569-8720-4f19-97b3-ef8d7d1f19d1"),
                             Code = 2,
-                            CreationTime = new DateTime(2025, 7, 25, 1, 24, 57, 725, DateTimeKind.Local).AddTicks(337),
+                            CreationTime = new DateTime(2025, 7, 27, 2, 45, 7, 810, DateTimeKind.Local).AddTicks(4004),
                             IsActive = false,
                             Name = "Checking"
+                        });
+                });
+
+            modelBuilder.Entity("BankManagement.Entities.LookUps.BranchType", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Code")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("CreationTime");
+
+                    b.Property<Guid?>("CreatorId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("CreatorId");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("TenantId");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("BranchTypes", "BankManagement");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("5126bb9a-4c1c-4284-96fd-58bed40a1689"),
+                            Code = 1,
+                            CreationTime = new DateTime(2025, 7, 27, 2, 45, 7, 810, DateTimeKind.Local).AddTicks(4311),
+                            IsActive = false,
+                            Name = "Branch"
+                        },
+                        new
+                        {
+                            Id = new Guid("ff7a39f0-6b2e-46e1-a878-7a04de16a6e8"),
+                            Code = 2,
+                            CreationTime = new DateTime(2025, 7, 27, 2, 45, 7, 810, DateTimeKind.Local).AddTicks(4317),
+                            IsActive = false,
+                            Name = "Atm"
                         });
                 });
 
@@ -312,7 +465,7 @@ namespace BankManagement.Migrations
                         {
                             Id = new Guid("42f63785-93f9-4b53-9038-9499455d9cd5"),
                             Code = 1,
-                            CreationTime = new DateTime(2025, 7, 25, 1, 24, 57, 725, DateTimeKind.Local).AddTicks(604),
+                            CreationTime = new DateTime(2025, 7, 27, 2, 45, 7, 810, DateTimeKind.Local).AddTicks(4252),
                             IsActive = false,
                             Name = "Bank"
                         },
@@ -320,7 +473,7 @@ namespace BankManagement.Migrations
                         {
                             Id = new Guid("ea9295a9-610d-41b1-8c95-8766b8ec4055"),
                             Code = 2,
-                            CreationTime = new DateTime(2025, 7, 25, 1, 24, 57, 725, DateTimeKind.Local).AddTicks(609),
+                            CreationTime = new DateTime(2025, 7, 27, 2, 45, 7, 810, DateTimeKind.Local).AddTicks(4260),
                             IsActive = false,
                             Name = "Credit"
                         });
@@ -362,33 +515,17 @@ namespace BankManagement.Migrations
                         {
                             Id = new Guid("6707cd60-afa6-4be8-ad69-53436ae92aa3"),
                             Code = 1,
-                            CreationTime = new DateTime(2025, 7, 25, 1, 24, 57, 725, DateTimeKind.Local).AddTicks(632),
+                            CreationTime = new DateTime(2025, 7, 27, 2, 45, 7, 810, DateTimeKind.Local).AddTicks(4283),
                             IsActive = false,
-                            Name = "AccountToAccount"
+                            Name = "ToAccount"
                         },
                         new
                         {
                             Id = new Guid("586dee74-6c05-4f4f-bd00-51724d0fe571"),
                             Code = 2,
-                            CreationTime = new DateTime(2025, 7, 25, 1, 24, 57, 725, DateTimeKind.Local).AddTicks(636),
+                            CreationTime = new DateTime(2025, 7, 27, 2, 45, 7, 810, DateTimeKind.Local).AddTicks(4288),
                             IsActive = false,
-                            Name = "AccountToCard"
-                        },
-                        new
-                        {
-                            Id = new Guid("773ce647-3ec2-4e6e-9eec-3ba8fce2c33a"),
-                            Code = 3,
-                            CreationTime = new DateTime(2025, 7, 25, 1, 24, 57, 725, DateTimeKind.Local).AddTicks(638),
-                            IsActive = false,
-                            Name = "CardToAccount"
-                        },
-                        new
-                        {
-                            Id = new Guid("6c31cd15-a33f-4564-956f-5d87d0c6a4fe"),
-                            Code = 4,
-                            CreationTime = new DateTime(2025, 7, 25, 1, 24, 57, 725, DateTimeKind.Local).AddTicks(639),
-                            IsActive = false,
-                            Name = "CardToCard"
+                            Name = "ToCard"
                         });
                 });
 
@@ -2214,12 +2351,33 @@ namespace BankManagement.Migrations
                     b.HasOne("BankManagement.Entities.Customer", "Customer")
                         .WithMany("Accounts")
                         .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("AccountTypes");
 
                     b.Navigation("Customer");
+                });
+
+            modelBuilder.Entity("BankManagement.Entities.Branch", b =>
+                {
+                    b.HasOne("BankManagement.Entities.LookUps.BranchType", "BranchType")
+                        .WithMany("Branches")
+                        .HasForeignKey("BranchTypeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("BranchType");
+                });
+
+            modelBuilder.Entity("BankManagement.Entities.BranchMapFeature", b =>
+                {
+                    b.HasOne("BankManagement.Entities.Branch", "Branch")
+                        .WithMany("BranchMapFeatures")
+                        .HasForeignKey("BranchId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("Branch");
                 });
 
             modelBuilder.Entity("BankManagement.Entities.Card", b =>
@@ -2409,6 +2567,11 @@ namespace BankManagement.Migrations
                     b.Navigation("Transactions");
                 });
 
+            modelBuilder.Entity("BankManagement.Entities.Branch", b =>
+                {
+                    b.Navigation("BranchMapFeatures");
+                });
+
             modelBuilder.Entity("BankManagement.Entities.Customer", b =>
                 {
                     b.Navigation("Accounts");
@@ -2417,6 +2580,11 @@ namespace BankManagement.Migrations
             modelBuilder.Entity("BankManagement.Entities.LookUps.AccountType", b =>
                 {
                     b.Navigation("Accounts");
+                });
+
+            modelBuilder.Entity("BankManagement.Entities.LookUps.BranchType", b =>
+                {
+                    b.Navigation("Branches");
                 });
 
             modelBuilder.Entity("BankManagement.Entities.LookUps.CardType", b =>

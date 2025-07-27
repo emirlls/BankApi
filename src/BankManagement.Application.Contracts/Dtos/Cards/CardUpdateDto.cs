@@ -1,8 +1,6 @@
 namespace BankManagement.Dtos.Cards;
 
-public class CardUpdateDto
+public class CardUpdateDto : CardBaseDto
 {
-    public bool IsActive { get; set; }
-    
-    public float CardLimit { get; set; }
+    public float Balance { get; set; }
 }

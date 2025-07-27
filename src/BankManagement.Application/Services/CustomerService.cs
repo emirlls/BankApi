@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -6,6 +7,7 @@ using BankManagement.Entities;
 using BankManagement.ExceptionCodes;
 using BankManagement.Localization;
 using BankManagement.Managers;
+using BankManagement.Models.Customers;
 using BankManagement.Repositories;
 using Microsoft.Extensions.Localization;
 using Volo.Abp;
@@ -13,80 +15,62 @@ using Volo.Abp.Application.Services;
 
 namespace BankManagement.Services;
 
-public class CustomerService:ApplicationService,ICustomerService
+public class CustomerService : ApplicationService, ICustomerService
 {
     private readonly ICustomerRepository _customerRepository;
     private readonly CustomerManager _customerManager;
     private readonly IStringLocalizer<BankManagementResource> _stringLocalizer;
 
-    public CustomerService(ICustomerRepository customerRepository, CustomerManager customerManager, IStringLocalizer<BankManagementResource> stringLocalizer)
+    public CustomerService(
+        ICustomerRepository customerRepository, 
+        CustomerManager customerManager,
+        IStringLocalizer<BankManagementResource> stringLocalizer
+    )
     {
         _customerRepository = customerRepository;
         _customerManager = customerManager;
         _stringLocalizer = stringLocalizer;
     }
-    // todo: Use elastic on get methods.
-    public async Task<CustomerDto> CreateAsync(CustomerDto customerDto, CancellationToken cancellationToken = default)
+    public async Task<bool> CreateAsync(CustomerCreateDto customerCreateDto,
+        CancellationToken cancellationToken = default)
     {
-        var alreadyExists = await _customerRepository.FindAsync(
-            x => x.IdentityNumber.Equals(customerDto.IdentityNumber), cancellationToken: cancellationToken);
-        
+        var alreadyExists = await _customerManager.TryGetByAsync(
+            x => x.IdentityNumber.Equals(customerCreateDto.IdentityNumber));
+
         if (alreadyExists != null)
         {
             throw new UserFriendlyException(_stringLocalizer[CustomerExceptionCodes.AlreadyExists]);
         }
-        var customer = _customerManager.Create(
-            customerDto.IdentityNumber, 
-            customerDto.Name, 
-            customerDto.Surname,
-            customerDto.Mail, 
-            customerDto.Phone, 
-            customerDto.Birthday);
+
+        var customerCreateModel = ObjectMapper.Map<CustomerCreateDto, CustomerCreateModel>(customerCreateDto);
+        var customer = _customerManager.Create(customerCreateModel);
 
         await _customerRepository.InsertAsync(customer, cancellationToken: cancellationToken);
-        
-        return ObjectMapper.Map<Customer, CustomerDto>(customer);
-        
-    }
-
-    public async Task<CustomerDto> UpdateAsync(string identityNumber, CustomerUpdateDto customerUpdateDto,
-        CancellationToken cancellationToken = default)
-    {
-        var customer = await _customerRepository.GetAsync(x => x.IdentityNumber.Equals(identityNumber),cancellationToken:cancellationToken);
-        if (customer == null)
-        {
-            throw new UserFriendlyException(_stringLocalizer[CustomerExceptionCodes.NotFound]);
-        }
-
-        var newCustomer = _customerManager.Update(customer,customerUpdateDto.Name, customerUpdateDto.Surname,
-            customerUpdateDto.Phone, customerUpdateDto.Mail);
-        await _customerRepository.UpdateAsync(customer, cancellationToken: cancellationToken);
-        return ObjectMapper.Map<Customer, CustomerDto>(newCustomer);
-    }
-
-    public async Task<bool> DeleteAsync(string identityNumber, CancellationToken cancellationToken = default)
-    {
-        var customer = await _customerRepository.GetAsync(x => x.IdentityNumber.Equals(identityNumber),
-            cancellationToken: cancellationToken);
-        if (customer == null)
-        {
-            throw new UserFriendlyException(_stringLocalizer[CustomerExceptionCodes.NotFound]);
-        }
-
-        await _customerRepository.DeleteAsync(customer);
         return true;
     }
 
-    public async Task<CustomerDto> GetByIdAsync(string identityNumber, CancellationToken cancellationToken = default)
+    public async Task<bool> UpdateAsync(Guid id, CustomerUpdateDto customerUpdateDto,
+        CancellationToken cancellationToken = default)
     {
-        var customer = await _customerRepository.GetAsync(x => x.IdentityNumber.Equals(identityNumber),
-            cancellationToken: cancellationToken);
-        if (customer == null)
-        {
-            throw new UserFriendlyException(_stringLocalizer[CustomerExceptionCodes.NotFound]);
-        }
+        var customer = await _customerManager.TryGetByAsync(x => x.Id.Equals(id), true);
+        var customerUpdateModel = ObjectMapper.Map<CustomerUpdateDto, CustomerUpdateModel>(customerUpdateDto);
 
-        return ObjectMapper.Map<Customer, CustomerDto>(customer);
+        var updatedCustomer = _customerManager.Update(customer!, customerUpdateModel);
+        await _customerRepository.UpdateAsync(updatedCustomer, cancellationToken: cancellationToken);
+        return true;
+    }
+
+    public async Task<bool> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        var customer = await _customerManager.TryGetByAsync(x => x.Id.Equals(id), true);
+        await _customerRepository.DeleteAsync(customer!, cancellationToken: cancellationToken);
+        return true;
+    }
+
+    public async Task<CustomerDto> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        var customer = await _customerManager.TryGetByAsync(x => x.Id.Equals(id), true);
+        return ObjectMapper.Map<Customer, CustomerDto>(customer!);
     }
 
     public async Task<List<CustomerDto>> GetListAsync(CancellationToken cancellationToken = default)

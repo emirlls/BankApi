@@ -1,43 +1,48 @@
 using System;
 using BankManagement.Entities;
-using Volo.Abp.Domain.Services;
+using BankManagement.ExceptionCodes;
+using BankManagement.Localization;
+using BankManagement.Models.Cards;
+using BankManagement.Repositories;
+using Microsoft.Extensions.Localization;
 
 namespace BankManagement.Managers;
 
-public class CardManager:DomainService
+public class CardManager : ExtendedManager<Card, ICardRepository>
 {
-    public CardManager()
+    public CardManager(ICardRepository repository, IStringLocalizer<BankManagementResource> stringLocalizer) : base(
+        repository, stringLocalizer, CardExceptionCodes.NotFound)
     {
     }
 
     public Card Create(
-        Guid accountId, 
-        Guid cardTypeId,
-        string cardNumber, 
-        string cvv, 
-        float cardLimit,
-        bool isActive
+        CardCreateModel cardCreateModel
     )
     {
-        return new Card(GuidGenerator.Create(),CurrentTenant.Id,DateTime.Now)
+        return new Card(GuidGenerator.Create(), CurrentTenant.Id, DateTime.Now)
         {
-            AccountId = accountId,
-            CardNumber = cardNumber,
-            Cvv = cvv,
-            CardTypeId = cardTypeId,
+            AccountId = cardCreateModel.AccountId,
+            CardNumber = cardCreateModel.CardNumber,
+            Cvv = cardCreateModel.Cvv,
+            CardTypeId = cardCreateModel.CardTypeId,
             Balance = 0,
-            CardLimit = cardLimit,
-            IsActive = isActive
+            CardLimit = cardCreateModel.CardLimit,
+            IsActive = cardCreateModel.IsActive
         };
     }
-    
+
     public Card Update(
-        Card card, 
-        bool isActive
+        Card card,
+        CardUpdateModel cardUpdateModel
     )
     {
-        card.IsActive = isActive;
+        card.AccountId = cardUpdateModel.AccountId;
+        card.CardNumber = cardUpdateModel.CardNumber;
+        card.Cvv = cardUpdateModel.Cvv;
+        card.CardTypeId = cardUpdateModel.CardTypeId;
+        card.Balance = cardUpdateModel.Balance;
+        card.CardLimit = cardUpdateModel.CardLimit;
+        card.IsActive = cardUpdateModel.IsActive;
         return card;
     }
-    
 }

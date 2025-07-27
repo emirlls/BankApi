@@ -17,6 +17,9 @@ public static class BankManagementTableNameProvider
             nameof(AccountType) => "AccountTypes",
             nameof(CardType) => "CardTypes",
             nameof(TransactionType) => "TransactionTypes",
+            nameof(Branch) => "Branches",
+            nameof(BranchType) => "BranchTypes",
+            nameof(BranchMapFeature) => "BranchMapFeatures",
             _ => throw new NotImplementedException()
         };
 }

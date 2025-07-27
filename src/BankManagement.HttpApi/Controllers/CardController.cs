@@ -54,7 +54,7 @@ public class CardController:AbpControllerBase
     /// <returns></returns>
     [HttpPost]
     [CacheClear<CardCommonDto>(CacheModelConstants.CardCacheModel)]
-    public async Task<CardCommonDto> CreateAsync(CardCreateDto cardCreateDto,
+    public async Task<bool> CreateAsync(CardCreateDto cardCreateDto,
         CancellationToken cancellationToken = default)
     {
         return await _cardService.CreateAsync(cardCreateDto, cancellationToken);
@@ -69,7 +69,7 @@ public class CardController:AbpControllerBase
     /// <returns></returns>
     [HttpPut("{id}")]
     [CacheClear<CardCommonDto>(CacheModelConstants.CardCacheModel)]
-    public async Task<CardCommonDto> UpdateAsync(Guid id, CardUpdateDto cardUpdateDto,
+    public async Task<bool> UpdateAsync(Guid id, CardUpdateDto cardUpdateDto,
         CancellationToken cancellationToken = default)
     {
         return await _cardService.UpdateAsync(id, cardUpdateDto, cancellationToken);

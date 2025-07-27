@@ -6,7 +6,7 @@ using Microsoft.Extensions.Localization;
 
 namespace BankManagement.Validators;
 
-public class CustomerDtoValidator:AbstractValidator<CustomerDto>
+public class CustomerDtoValidator:AbstractValidator<CustomerCreateDto>
 {
     public CustomerDtoValidator(IStringLocalizer<BankManagementResource> stringLocalizer)
     {

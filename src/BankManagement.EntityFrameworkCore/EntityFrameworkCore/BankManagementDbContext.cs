@@ -35,6 +35,9 @@ public class BankManagementDbContext : AbpDbContext<BankManagementDbContext>, IB
     public DbSet<AccountType> AccountTypes { get; set; }
     public DbSet<CardType> CardTypes { get; set; }
     public DbSet<TransactionType> TransactionTypes { get; set; }
+    public DbSet<Branch> Branches { get; set; }
+    public DbSet<BranchType> BranchTypes { get; set; }
+    public DbSet<BranchMapFeature> BranchMapFeatures { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

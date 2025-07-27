@@ -53,5 +53,20 @@ public static class LookupSeeders
             }
         );
         #endregion
+
+        #region BranchTypes
+        builder.Entity<BranchType>().HasData(
+            new BranchType(Guid.Parse(LookupSeederConstants.BranchTypes.Branch),null,DateTime.Now)
+            {
+                Code = 1,
+                Name = "Branch"
+            },
+            new BranchType(Guid.Parse(LookupSeederConstants.BranchTypes.Atm),null,DateTime.Now)
+            {
+                Code = 2,
+                Name = "Atm"
+            }
+        );
+        #endregion
     }
 }
