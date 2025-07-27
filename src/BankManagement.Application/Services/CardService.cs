@@ -5,12 +5,9 @@ using System.Threading.Tasks;
 using BankManagement.Constants;
 using BankManagement.Dtos.Cards;
 using BankManagement.Entities;
-using BankManagement.ExceptionCodes;
-using BankManagement.Localization;
 using BankManagement.Managers;
+using BankManagement.Models.Cards;
 using BankManagement.Repositories;
-using Microsoft.Extensions.Localization;
-using Volo.Abp;
 using Volo.Abp.Application.Services;
 
 namespace BankManagement.Services;
@@ -18,87 +15,61 @@ namespace BankManagement.Services;
 public class CardService : ApplicationService, ICardService
 {
     private readonly ICardRepository _cardRepository;
-    private readonly IAccountRepository _accountRepository;
-    private readonly ICustomerRepository _customerRepository;
     private readonly CardManager _cardManager;
-    private readonly IStringLocalizer<BankManagementResource> _stringLocalizer;
+    private readonly AccountManager _accountManager;
 
-    public CardService(ICardRepository cardRepository, IAccountRepository accountRepository,
-        ICustomerRepository customerRepository, IStringLocalizer<BankManagementResource> stringLocalizer,
-        CardManager cardManager)
+    public CardService(
+        ICardRepository cardRepository,
+        CardManager cardManager, 
+        AccountManager accountManager
+    )
     {
         _cardRepository = cardRepository;
-        _accountRepository = accountRepository;
-        _customerRepository = customerRepository;
-        _stringLocalizer = stringLocalizer;
         _cardManager = cardManager;
+        _accountManager = accountManager;
     }
-    // todo: Use elastic on get methods.
-    public async Task<CardCommonDto> CreateAsync(CardCreateDto cardCreateDto,
+    public async Task<bool> CreateAsync(CardCreateDto cardCreateDto,
         CancellationToken cancellationToken = default)
     {
-        var account = await _accountRepository.FindAsync(
-            x => x.Id.Equals(cardCreateDto.AccountId) && x.IsAvailable.Equals(true),
-            cancellationToken: cancellationToken);
-
-        if (account == null)
-        {
-            throw new UserFriendlyException(_stringLocalizer[AccountExceptionCodes.NotFound]);
-        }
-
+        await _accountManager.TryGetByAsync(x =>
+                x.Id.Equals(cardCreateDto.AccountId) && x.IsAvailable.Equals(true),true);
         if (cardCreateDto.CardTypeId == Guid.Parse(LookupSeederConstants.CardTypes.Bank))
         {
             cardCreateDto.CardLimit = 0;
         }
-
-        var card = _cardManager.Create(account.Id, cardCreateDto.CardTypeId,cardCreateDto.CardNumber, cardCreateDto.Cvv,
-            cardCreateDto.CardLimit, true);
-
+        var cardCreateModel = ObjectMapper.Map<CardCreateDto, CardCreateModel>(cardCreateDto);
+        var card = _cardManager.Create(cardCreateModel);
         await _cardRepository.InsertAsync(card, cancellationToken: cancellationToken);
-
-        return ObjectMapper.Map<Card, CardCommonDto>(card);
+        return true;
     }
 
-    public async Task<CardCommonDto> UpdateAsync(Guid id, CardUpdateDto cardUpdateDto,
+    public async Task<bool> UpdateAsync(Guid id, CardUpdateDto cardUpdateDto,
         CancellationToken cancellationToken = default)
     {
-        var card = await _cardRepository.FindAsync(x => x.Id.Equals(id), cancellationToken: cancellationToken);
-        if (card == null)
-        {
-            throw new UserFriendlyException(_stringLocalizer[CardExceptionCodes.NotFound]);
-        }
+        var card = await _cardManager.TryGetByAsync(x => x.Id.Equals(id), true);
 
         if (card.CardTypeId == Guid.Parse(LookupSeederConstants.CardTypes.Bank))
         {
             cardUpdateDto.CardLimit = 0;
         }
 
-        _cardManager.Update(card, cardUpdateDto.IsActive);
+        var cardUpdateModel = ObjectMapper.Map<CardUpdateDto, CardUpdateModel>(cardUpdateDto);
+        _cardManager.Update(card, cardUpdateModel);
 
         await _cardRepository.UpdateAsync(card, cancellationToken: cancellationToken);
-        return ObjectMapper.Map<Card, CardCommonDto>(card);
+        return true;
     }
 
     public async Task<bool> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        var card = await _cardRepository.FindAsync(x => x.Id.Equals(id), cancellationToken: cancellationToken);
-        if (card == null)
-        {
-            throw new UserFriendlyException(_stringLocalizer[CardExceptionCodes.NotFound]);
-        }
-
-        await _cardRepository.DeleteAsync(card, cancellationToken: cancellationToken);
+        var card = await _cardManager.TryGetByAsync(x => x.Id.Equals(id), true);
+        await _cardRepository.DeleteAsync(card!, cancellationToken: cancellationToken);
         return true;
     }
 
     public async Task<CardCommonDto> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        var card = await _cardRepository.FindAsync(x => x.Id.Equals(id), cancellationToken: cancellationToken);
-        if (card == null)
-        {
-            throw new UserFriendlyException(_stringLocalizer[CardExceptionCodes.NotFound]);
-        }
-
+        var card = await _cardManager.TryGetByAsync(x => x.Id.Equals(id), true);
         return ObjectMapper.Map<Card, CardCommonDto>(card);
     }
 

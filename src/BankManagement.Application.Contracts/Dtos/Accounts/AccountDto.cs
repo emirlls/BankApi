@@ -1,7 +1,11 @@
+using System;
+
 namespace BankManagement.Dtos.Accounts;
 
 public class AccountDto
 {
+    public Guid Id { get; set; }
+    public Guid CustomerId { get; set; }
     public string CustomerName { get; set; }
     public string CustomerSurname { get; set; }
     public string Iban { get; set; }

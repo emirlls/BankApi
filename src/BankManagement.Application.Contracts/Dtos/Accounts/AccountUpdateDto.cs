@@ -1,11 +1,5 @@
-using System;
-
 namespace BankManagement.Dtos.Accounts;
 
-public class AccountUpdateDto
+public class AccountUpdateDto : AccountBaseDto
 {
-    public Guid AccountTypeId { get; set; }
-    public string Iban { get; set; }
-    public bool IsAvailable { get; set; }
-    public float Balance { get; set; }
 }

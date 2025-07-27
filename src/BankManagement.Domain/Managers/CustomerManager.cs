@@ -1,49 +1,47 @@
 using System;
 using BankManagement.Entities;
-using Volo.Abp.Domain.Services;
+using BankManagement.ExceptionCodes;
+using BankManagement.Localization;
+using BankManagement.Models.Customers;
+using BankManagement.Repositories;
+using Microsoft.Extensions.Localization;
 
 namespace BankManagement.Managers;
 
-public class CustomerManager : DomainService
+public class CustomerManager : ExtendedManager<Customer, ICustomerRepository>
 {
-    public CustomerManager()
+    public CustomerManager(ICustomerRepository repository, IStringLocalizer<BankManagementResource> stringLocalizer) :
+        base(repository, stringLocalizer, CustomerExceptionCodes.NotFound)
     {
     }
 
-
     public Customer Create(
-        string identityNumber,
-        string name,
-        string surname,
-        string mail,
-        string phone,
-        DateTime birthday
+        CustomerCreateModel customerCreateModel
     )
     {
         return new Customer(GuidGenerator.Create(), CurrentTenant.Id, DateTime.Now)
         {
-            IdentityNumber = identityNumber,
-            Name = name,
-            Surname = surname,
-            Mail = mail,
-            Phone = phone,
-            Birthday = birthday
+            IdentityNumber = customerCreateModel.IdentityNumber,
+            Name = customerCreateModel.Name,
+            Surname = customerCreateModel.Surname,
+            Mail = customerCreateModel.Mail,
+            Phone = customerCreateModel.Phone,
+            Birthday = customerCreateModel.Birthday
         };
     }
 
 
     public Customer Update(
         Customer customer,
-        string name,
-        string surname,
-        string mail,
-        string phone
+        CustomerUpdateModel customerUpdateModel
     )
     {
-        customer.Name = name;
-        customer.Surname = surname;
-        customer.Mail = mail;
-        customer.Phone = phone;
+        customer.IdentityNumber = customerUpdateModel.IdentityNumber;
+        customer.Name = customerUpdateModel.Name;
+        customer.Surname = customerUpdateModel.Surname;
+        customer.Mail = customerUpdateModel.Mail;
+        customer.Phone = customer.Phone;
+        customer.Birthday = customer.Birthday;
         return customer;
     }
 }

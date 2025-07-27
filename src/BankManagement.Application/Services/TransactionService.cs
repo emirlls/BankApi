@@ -61,7 +61,7 @@ public class TransactionService : ApplicationService, ITransactionService
         var transaction = await _transactionManager.TryGetByAsync(x => x.Id.Equals(id), true);
         var transactionUpdateModel =
             ObjectMapper.Map<TransactionUpdateDto, TransactionUpdateModel>(transactionUpdateDto);
-        var updatedTransaction = _transactionManager.Update(transaction, transactionUpdateModel);
+        var updatedTransaction = _transactionManager.Update(transaction!, transactionUpdateModel);
         await _transactionRepository.UpdateAsync(updatedTransaction, cancellationToken: cancellationToken);
         await _distributedEventBus.PublishAsync(new TransactionUpdateEto
         {

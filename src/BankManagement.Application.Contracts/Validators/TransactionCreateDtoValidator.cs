@@ -11,7 +11,7 @@ public class TransactionCreateDtoValidator:AbstractValidator<TransactionCreateDt
     {
         RuleFor(x => x.SenderIban)
             .NotEmpty();
-        RuleFor(x => x.RecevierIban)
+        RuleFor(x => x.ReceiverIban)
             .NotEmpty();
         RuleFor(x => x.Balance)
             .NotEmpty();

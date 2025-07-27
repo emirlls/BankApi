@@ -28,24 +28,30 @@
 
     "BankManagement.Transaction:00001": "Transaction bulunamadı",
     "BankManagement.Transaction:00002": "Transaction zaten var",
+
+
+    "BankManagement.Branch:00001": "Şube bulunamadı",
+    "BankManagement.BranchMapFeature:00001": "Şube konumu bulunamadı",
     
-    
+
     //Enums
     
     //Account Types
-    "BankManagement.Enums.AccountTypes.ACC:01": "Vadeli",
-    "BankManagement.Enums.AccountTypes.ACC:02": "Vadesiz",
+    "BankManagement.Enums.AccountTypes:01": "Vadeli",
+    "BankManagement.Enums.AccountTypes:02": "Vadesiz",
     
     //Card Types
-    "BankManagement.Enums.CardTypes.CAR:01": "Banka Kartı",
-    "BankManagement.Enums.CardTypes.CAR:02": "Kredi Kartı",
+    "BankManagement.Enums.CardTypes:01": "Banka Kartı",
+    "BankManagement.Enums.CardTypes:02": "Kredi Kartı",
 
     //Transaction Types
-    "BankManagement.Enums.TransactionTypes.TRA:01": "Hesaptan hesaba",
-    "BankManagement.Enums.TransactionTypes.TRA:02": "Hesaptan karta",
-    "BankManagement.Enums.TransactionTypes.TRA:03": "Karttan hesaba",
-    "BankManagement.Enums.TransactionTypes.TRA:04": "Karttan karta",
-    
+    "BankManagement.Enums.TransactionTypes:01": "Hesaba",
+    "BankManagement.Enums.TransactionTypes:02": "Karta",
+
+    //Branch Types
+    "BranchTypes:01": "Branch",
+    "BranchTypes:02": "Atm",
+
     //Dashboard Labels
     "DashboardLabels:01" : "Günlük Transfer Sayısı"
   }
