@@ -37,22 +37,22 @@
     //Enums
     
     //Account Types
-    "BankManagement.Enums.AccountTypes:01": "Vadeli",
+    "Enum.BankManagement.Enums.AccountTypes:01": "Vadeli",
     "BankManagement.Enums.AccountTypes:02": "Vadesiz",
     
     //Card Types
-    "BankManagement.Enums.CardTypes:01": "Banka Kartı",
-    "BankManagement.Enums.CardTypes:02": "Kredi Kartı",
+    "Enum.BankManagement.Enums.CardTypes:01": "Banka Kartı",
+    "Enum.BankManagement.Enums.CardTypes:02": "Kredi Kartı",
 
     //Transaction Types
-    "BankManagement.Enums.TransactionTypes:01": "Hesaba",
-    "BankManagement.Enums.TransactionTypes:02": "Karta",
+    "Enum.BankManagement.Enums.TransactionTypes:01": "Hesaba",
+    "Enum.BankManagement.Enums.TransactionTypes:02": "Karta",
 
     //Branch Types
-    "BranchTypes:01": "Branch",
-    "BranchTypes:02": "Atm",
+    "Enum.BranchTypes:01": "Branch",
+    "Enum.BranchTypes:02": "Atm",
 
     //Dashboard Labels
-    "DashboardLabels:01" : "Günlük Transfer Sayısı"
+    "Enum.DashboardLabels:01" : "Günlük Transfer Sayısı"
   }
 }

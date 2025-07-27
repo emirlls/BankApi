@@ -55,8 +55,7 @@ namespace BankManagement;
     typeof(AbpTenantManagementEntityFrameworkCoreModule),
     typeof(AbpAspNetCoreSerilogModule),
     typeof(AbpSwashbuckleModule)
-    )]
-
+)]
 public class BankManagementHttpApiHostModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)
@@ -64,7 +63,6 @@ public class BankManagementHttpApiHostModule : AbpModule
         base.PreConfigureServices(context);
         AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
         ServiceConfigurationContextExtension.ResolveSchemaAndPrefix();
-        
     }
 
     public override void ConfigureServices(ServiceConfigurationContext context)
@@ -72,13 +70,7 @@ public class BankManagementHttpApiHostModule : AbpModule
         var hostingEnvironment = context.Services.GetHostingEnvironment();
         var configuration = context.Services.GetConfiguration();
 
-        Configure<AbpDbContextOptions>(options =>
-        {
-            options.UseNpgsql(opts =>
-            {
-                opts.UseNetTopologySuite();
-            });
-        });
+        Configure<AbpDbContextOptions>(options => { options.UseNpgsql(opts => { opts.UseNetTopologySuite(); }); });
 
 
         Configure<RedisCacheOptions>(options =>
@@ -94,20 +86,26 @@ public class BankManagementHttpApiHostModule : AbpModule
             var settings = new ConnectionSettings(new Uri(elasticsearchOptions.Host));
             return new ElasticClient(settings);
         });
-        
-        Configure<AbpMultiTenancyOptions>(options =>
-        {
-            options.IsEnabled = MultiTenancyConsts.IsEnabled;
-        });
+
+        Configure<AbpMultiTenancyOptions>(options => { options.IsEnabled = MultiTenancyConsts.IsEnabled; });
 
         if (hostingEnvironment.IsDevelopment())
         {
             Configure<AbpVirtualFileSystemOptions>(options =>
             {
-                options.FileSets.ReplaceEmbeddedByPhysical<BankManagementDomainSharedModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}src{0}BankManagement.Domain.Shared", Path.DirectorySeparatorChar)));
-                options.FileSets.ReplaceEmbeddedByPhysical<BankManagementDomainModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}src{0}BankManagement.Domain", Path.DirectorySeparatorChar)));
-                options.FileSets.ReplaceEmbeddedByPhysical<BankManagementApplicationContractsModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}src{0}BankManagement.Application.Contracts", Path.DirectorySeparatorChar)));
-                options.FileSets.ReplaceEmbeddedByPhysical<BankManagementApplicationModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}src{0}BankManagement.Application", Path.DirectorySeparatorChar)));
+                options.FileSets.ReplaceEmbeddedByPhysical<BankManagementDomainSharedModule>(
+                    Path.Combine(hostingEnvironment.ContentRootPath,
+                        string.Format("..{0}..{0}src{0}BankManagement.Domain.Shared", Path.DirectorySeparatorChar)));
+                options.FileSets.ReplaceEmbeddedByPhysical<BankManagementDomainModule>(
+                    Path.Combine(hostingEnvironment.ContentRootPath,
+                        string.Format("..{0}..{0}src{0}BankManagement.Domain", Path.DirectorySeparatorChar)));
+                options.FileSets.ReplaceEmbeddedByPhysical<BankManagementApplicationContractsModule>(
+                    Path.Combine(hostingEnvironment.ContentRootPath,
+                        string.Format("..{0}..{0}src{0}BankManagement.Application.Contracts",
+                            Path.DirectorySeparatorChar)));
+                options.FileSets.ReplaceEmbeddedByPhysical<BankManagementApplicationModule>(
+                    Path.Combine(hostingEnvironment.ContentRootPath,
+                        string.Format("..{0}..{0}src{0}BankManagement.Application", Path.DirectorySeparatorChar)));
             });
         }
 
@@ -115,15 +113,15 @@ public class BankManagementHttpApiHostModule : AbpModule
             configuration["AuthServer:Authority"]!,
             new Dictionary<string, string>
             {
-                {"BankManagement", "BankManagement API"}
+                { "BankManagement", "BankManagement API" }
             },
             options =>
             {
-                options.SwaggerDoc("v1", new OpenApiInfo {Title = "BankManagement API", Version = "v1"});
+                options.SwaggerDoc("v1", new OpenApiInfo { Title = "BankManagement API", Version = "v1" });
                 options.DocInclusionPredicate((docName, description) =>
                     ConfigureSwaggerNotVisibleApis(description));
                 options.CustomSchemaIds(type => type.FullName);
-                
+
                 var filePathHttpApi = Path.Combine(AppContext.BaseDirectory, "BankManagement.HttpApi.xml");
                 var filePathHttpApiHost = Path.Combine(AppContext.BaseDirectory, "BankManagement.HttpApi.Host.xml");
                 options.IncludeXmlComments(filePathHttpApi, true);
@@ -144,10 +142,7 @@ public class BankManagementHttpApiHostModule : AbpModule
                 options.Audience = "BankManagement";
             });
 
-        Configure<AbpDistributedCacheOptions>(options =>
-        {
-            options.KeyPrefix = "BankManagement:";
-        });
+        Configure<AbpDistributedCacheOptions>(options => { options.KeyPrefix = "BankManagement:"; });
 
         /*var dataProtectionBuilder = context.Services.AddDataProtection().SetApplicationName("BankManagement");
         if (!hostingEnvironment.IsDevelopment())
@@ -180,6 +175,7 @@ public class BankManagementHttpApiHostModule : AbpModule
     {
         return !apiDescription.RelativePath!.StartsWith("api/abp/");
     }
+
     public override void OnApplicationInitialization(ApplicationInitializationContext context)
     {
         var app = context.GetApplicationBuilder();
@@ -204,6 +200,7 @@ public class BankManagementHttpApiHostModule : AbpModule
         {
             app.UseMultiTenancy();
         }
+
         app.UseAbpRequestLocalization();
         app.UseAuthorization();
         app.UseSwagger();

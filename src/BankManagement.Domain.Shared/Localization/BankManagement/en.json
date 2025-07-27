@@ -37,25 +37,25 @@
     
     //Enums
 
-
     //Account Types
-    "BankManagement.Enums.AccountTypes:01": "Deposit",
-    "BankManagement.Enums.AccountTypes:02": "Checking",
+    "Enum.BankManagement.Enums.AccountTypes:01": "Deposit",
+    "Enum.BankManagement.Enums.AccountTypes:02": "Checking",
 
     //Card Types
 
-    "BankManagement.Enums.CardTypes:01": "Bank Card",
-    "BankManagement.Enums.CardTypes:02": "Credit Card",
+    "Enum.BankManagement.Enums.CardTypes:01": "Bank Card",
+    "Enum.BankManagement.Enums.CardTypes:02": "Credit Card",
     
     //Transaction Types
-    "BankManagement.Enums.TransactionTypes:01": "To Account",
-    "BankManagement.Enums.TransactionTypes:02": "To Card",
+    "Enum.BankManagement.Enums.TransactionTypes:01": "To Account",
+    "Enum.BankManagement.Enums.TransactionTypes:02": "To Card",
 
     //Branch Types
-    "BranchTypes:01": "Branch",
-    "BranchTypes:02": "Atm",
+    "Enum.BranchTypes:01": "Branch",
+    "Enum.BranchTypes:02": "Atm",
+    
     
     //Dashboard Labels
-    "DashboardLabels:01" : "Daily Transaction Count"
+    "Enum.DashboardLabels:01" : "Daily Transaction Count"
   }
 }
