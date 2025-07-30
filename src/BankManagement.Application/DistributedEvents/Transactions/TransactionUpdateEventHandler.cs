@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using BankManagement.Constants;
 using BankManagement.Entities;
 using BankManagement.Models.ElasticSearchs;
+using BankManagement.Models.Transactions;
 using BankManagement.Repositories.ElasticSearchs;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.DependencyInjection;
@@ -24,9 +25,9 @@ public class TransactionUpdateEventHandler : IDistributedEventHandler<Transactio
     {
         var esTransactionRepository = _serviceProvider.GetRequiredService<IEsTransactionRepository>();
         var objectMapper = _serviceProvider.GetRequiredService<IObjectMapper>();
-        await esTransactionRepository.DeleteDocumentAsync(eventData.Transaction.Id,
+        await esTransactionRepository.DeleteDocumentAsync(eventData.TransactionEventModel.Id,
             ElasticSearchConstants.Transaction.TransactionIndex);
-        var transactionElasticModel = objectMapper.Map<Transaction, TransactionElasticModel>(eventData.Transaction);
+        var transactionElasticModel = objectMapper.Map<TransactionEventModel, TransactionElasticModel>(eventData.TransactionEventModel);
         await esTransactionRepository.CreateDocumentAsync(transactionElasticModel,
             ElasticSearchConstants.Transaction.TransactionIndex);
     }

@@ -53,9 +53,11 @@ public class ElasticSearchRepository<T, TKey> : IElasticSearchRepository<T, TKey
         CancellationToken cancellationToken = default
     )
     {
+        var idProperty = document.GetType().GetProperty(ElasticSearchConstants.IdPropertyName);
+        var idValue = idProperty?.GetValue(document)?.ToString();
         CreateRequest<T> createRequest = new(
             indexName,
-            document.GetType().GetProperty(ElasticSearchConstants.IdPropertyName)?.GetValue(document)!.ToString())
+            idValue)
         {
             Document = document
         };

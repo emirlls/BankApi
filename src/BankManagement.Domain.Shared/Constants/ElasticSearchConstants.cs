@@ -5,7 +5,7 @@ public class ElasticSearchConstants
     public const string ElasticsearchOptions = nameof(ElasticsearchOptions);
     public const int ElasticPageSize = 999999999;
     public const string DefaultIndex = "default";
-    public const string IdPropertyName = "id";
+    public const string IdPropertyName = "Id";
 
 
     public static class Transaction
