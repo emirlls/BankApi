@@ -41,26 +41,26 @@ public static class ElasticExtension
             await repository.DeleteManyAsync(entities);
         }
     }
-    
+
     /// <summary>
     /// The generic method used to map to elastic model and create document.
     /// </summary>
     /// <param name="serviceProvider"></param>
-    /// <param name="entity"></param>
+    /// <param name="model"></param>
     /// <param name="indexName"></param>
     /// <typeparam name="TEntity"></typeparam>
     /// <typeparam name="TModel"></typeparam>
-    public static async Task LogModelToElasticAsync<TEntity, TModel>(
+    public static async Task LogModelToElasticAsync<TEventModel, TModel>(
         this IServiceProvider serviceProvider,
-        TEntity entity,
+        TEventModel model,
         string indexName
     )
-        where TEntity : class, IEntity
+        where TEventModel : class
         where TModel : class
     {
         var elasticSearchRepository = serviceProvider.GetRequiredService<IElasticSearchRepository<TModel,Guid>>();
         var objectMapper = serviceProvider.GetRequiredService<IObjectMapper>();
-        var elasticModel = objectMapper.Map<TEntity,TModel>(entity);
+        var elasticModel = objectMapper.Map<TEventModel,TModel>(model);
         await elasticSearchRepository.CreateDocumentAsync(elasticModel, indexName);
     }
 }
