@@ -13,6 +13,7 @@ using BankManagement.EntityFrameworkCore;
 using BankManagement.Extensions;
 using BankManagement.Models.ElasticSearchs;
 using BankManagement.MultiTenancy;
+using BankManagement.Repositories.ElasticSearchs;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
@@ -29,6 +30,8 @@ using Volo.Abp.Caching;
 //using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.PostgreSql;
+using Volo.Abp.EventBus.Distributed;
+using Volo.Abp.EventBus.RabbitMq;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
@@ -72,6 +75,16 @@ public class BankManagementHttpApiHostModule : AbpModule
 
         Configure<AbpDbContextOptions>(options => { options.UseNpgsql(opts => { opts.UseNetTopologySuite(); }); });
 
+        Configure<AbpDistributedEventBusOptions>(options =>
+        {
+            
+        });
+        
+        Configure<AbpRabbitMqEventBusOptions>(options =>
+        {
+            options.ClientName = "BankManagementClient";
+            options.ExchangeName = "BankManagementExchange";
+        });
 
         Configure<RedisCacheOptions>(options =>
         {
@@ -79,7 +92,7 @@ public class BankManagementHttpApiHostModule : AbpModule
                 .GetConfiguration()
                 .GetSection("Redis")["Configuration"];
         });
-        context.Services.AddSingleton<IElasticClient>(provider =>
+        context.Services.AddSingleton<ElasticClient>(provider =>
         {
             var elasticsearchOptions = configuration.GetSection(ElasticSearchConstants.ElasticsearchOptions)
                 .Get<ElasticSearchOptions>();
@@ -88,6 +101,7 @@ public class BankManagementHttpApiHostModule : AbpModule
         });
 
         Configure<AbpMultiTenancyOptions>(options => { options.IsEnabled = MultiTenancyConsts.IsEnabled; });
+        context.Services.AddTransient(typeof(IElasticSearchRepository<,>), typeof(ElasticSearchRepository<,>));
 
         if (hostingEnvironment.IsDevelopment())
         {

@@ -1,9 +1,9 @@
 using System;
 using System.Threading.Tasks;
 using BankManagement.Constants;
-using BankManagement.Entities;
 using BankManagement.Extensions;
 using BankManagement.Models.ElasticSearchs;
+using BankManagement.Models.Transactions;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EventBus.Distributed;
 
@@ -20,7 +20,7 @@ public class TransactionCreateEventHandler : IDistributedEventHandler<Transactio
 
     public async Task HandleEventAsync(TransactionCreateEto eventData)
     {
-        await _serviceProvider.LogModelToElasticAsync<Transaction, TransactionElasticModel>(eventData.Transaction,
+        await _serviceProvider.LogModelToElasticAsync<TransactionEventModel, TransactionElasticModel>(eventData.TransactionEventModel,
             ElasticSearchConstants.Transaction.TransactionIndex);
     }
 }

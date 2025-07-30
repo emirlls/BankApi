@@ -7,6 +7,7 @@ using BankManagement.Constants;
 using BankManagement.DistributedEvents.Transactions;
 using BankManagement.Dtos;
 using BankManagement.Dtos.Transactions;
+using BankManagement.Entities;
 using BankManagement.ExceptionCodes;
 using BankManagement.Localization;
 using BankManagement.Managers;
@@ -47,10 +48,12 @@ public class TransactionService : ApplicationService, ITransactionService
         var transactionCreateModel =
             ObjectMapper.Map<TransactionCreateDto, TransactionCreateModel>(transactionCreateDto);
         var transaction = _transactionManager.Create(transactionCreateModel);
+        var transactionEventModel = ObjectMapper.Map<Transaction, TransactionEventModel>(transaction);
         await _transactionRepository.InsertAsync(transaction, cancellationToken: cancellationToken);
         await _distributedEventBus.PublishAsync(new TransactionCreateEto
         {
-            Transaction = transaction
+            Properties = null,
+            TransactionEventModel = transactionEventModel
         });
         return true;
     }
@@ -62,10 +65,11 @@ public class TransactionService : ApplicationService, ITransactionService
         var transactionUpdateModel =
             ObjectMapper.Map<TransactionUpdateDto, TransactionUpdateModel>(transactionUpdateDto);
         var updatedTransaction = _transactionManager.Update(transaction!, transactionUpdateModel);
+        var transactionEventModel = ObjectMapper.Map<Transaction, TransactionEventModel>(updatedTransaction);
         await _transactionRepository.UpdateAsync(updatedTransaction, cancellationToken: cancellationToken);
         await _distributedEventBus.PublishAsync(new TransactionUpdateEto
         {
-            Transaction = updatedTransaction
+            TransactionEventModel = transactionEventModel
         });
         return true;
     }
