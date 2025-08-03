@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using BankManagement.EntityFrameworkCore;
 using BankManagement.Extensions;
+using BankManagement.Grpc;
 using BankManagement.Models.ElasticSearchs;
 using BankManagement.MultiTenancy;
 using BankManagement.Repositories.ElasticSearchs;
@@ -79,7 +80,6 @@ public class BankManagementHttpApiHostModule : AbpModule
         {
             
         });
-        
         Configure<AbpRabbitMqEventBusOptions>(options =>
         {
             options.ClientName = "BankManagementClient";
@@ -102,7 +102,7 @@ public class BankManagementHttpApiHostModule : AbpModule
 
         Configure<AbpMultiTenancyOptions>(options => { options.IsEnabled = MultiTenancyConsts.IsEnabled; });
         context.Services.AddTransient(typeof(IElasticSearchRepository<,>), typeof(ElasticSearchRepository<,>));
-
+        context.Services.AddGrpc();
         if (hostingEnvironment.IsDevelopment())
         {
             Configure<AbpVirtualFileSystemOptions>(options =>
@@ -214,7 +214,6 @@ public class BankManagementHttpApiHostModule : AbpModule
         {
             app.UseMultiTenancy();
         }
-
         app.UseAbpRequestLocalization();
         app.UseAuthorization();
         app.UseSwagger();
@@ -225,6 +224,11 @@ public class BankManagementHttpApiHostModule : AbpModule
             var configuration = context.GetConfiguration();
             options.OAuthClientId(configuration["AuthServer:SwaggerClientId"]);
             options.OAuthScopes("BankManagement");
+        });
+        app.UseEndpoints(endpoints =>
+        {
+            endpoints.MapGrpcService<TransactionGrpcService>();
+            endpoints.MapControllers();
         });
         app.UseAuditing();
         app.UseAbpSerilogEnrichers();

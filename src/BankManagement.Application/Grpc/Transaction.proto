@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+option csharp_namespace = "BankManagement.Grpc";
+
+package transaction;
+
+service Transaction {
+  rpc Create (TransactionCreateRequest) returns (TransactionCreateResponse);
+}
+
+message TransactionCreateRequest {
+  string transactionTypeId = 1;
+  string senderIban = 2;
+  string receiverIban = 3;
+  double balance = 4;
+}
+
+message TransactionCreateResponse {
+  bool success = 1;
+}

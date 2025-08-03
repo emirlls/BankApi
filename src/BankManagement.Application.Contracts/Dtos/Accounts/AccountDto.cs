@@ -12,5 +12,5 @@ public class AccountDto
     public int AccountTypeCode { get; set; }
     public string AccountTypeName { get; set; }
     public bool IsAvailable { get; set; }
-    public float Balance { get; set; }
+    public double Balance { get; set; }
 }

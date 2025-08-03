@@ -12,7 +12,7 @@ public class Account:FullAuditedEntity<Guid>, IMultiTenant
     public Guid CustomerId { get; set; }
     public string Iban { get; set; }
     public bool IsAvailable { get; set; }
-    public float Balance { get; set; }
+    public double Balance { get; set; }
     public Guid AccountTypeId { get; set; }
     public virtual Customer Customer { get; set; }
     public virtual AccountType AccountTypes { get; set; }
