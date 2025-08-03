@@ -12,7 +12,7 @@ public class Card : FullAuditedEntity<Guid>, IMultiTenant
     public string CardNumber { get; set; }
     public string Cvv { get; set; }
     public float? CardLimit { get; set; }
-    public float Balance { get; set; }
+    public double Balance { get; set; }
     public bool IsActive { get; set; }
     public Guid CardTypeId { get; set; }
     public virtual Account Accounts { get; set; }

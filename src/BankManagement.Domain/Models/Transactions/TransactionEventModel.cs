@@ -9,6 +9,6 @@ public class TransactionEventModel
     public Guid TransactionTypeId { get; set; }
     public string SenderIban { get; set; }
     public string ReceiverIban { get; set; }
-    public float Balance { get; set; }
+    public double Balance { get; set; }
     public DateTime CreationTime { get; set; }
 }
